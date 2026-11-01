@@ -150,6 +150,9 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  verification: {
+    google: "RFvi1-GGJ3pAV9dTClNaXX3Sc5jq9zIKXioz0i2WHf4",
+  },
 };
 
 export const viewport = {
@@ -292,6 +295,7 @@ export default function RootLayout({
   return (
     <html lang="bn" data-theme="light" className="scroll-smooth" suppressHydrationWarning>
       <head>
+        <meta name="google-site-verification" content="RFvi1-GGJ3pAV9dTClNaXX3Sc5jq9zIKXioz0i2WHf4" />
         <link
           rel="preload"
           as="style"

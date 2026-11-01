@@ -18,11 +18,23 @@ export interface ProductVariant {
   extraPrice?: number;
 }
 
+export interface ProductReview {
+  id?: string;
+  _id?: string;
+  userName: string;
+  userEmail?: string;
+  userPhoto?: string;
+  rating: number;
+  comment: string;
+  isVerifiedBuyer?: boolean;
+  createdAt?: string;
+}
+
 export interface ProductItem {
   id: string;
   title: string;
   englishTitle: string;
-  category: 'Clothing' | 'Bags' | 'Luggage' | 'Kids & Baby' | 'Beauty Products' | string;
+  category: string;
   regularPrice: number;
   salePrice: number;
   discountPercent: number;
@@ -37,6 +49,22 @@ export interface ProductItem {
   badge: string;
   stockQuantity?: number;
   variants: ProductVariant[];
+  reviews?: ProductReview[];
+}
+
+export interface CategoryConfig {
+  id: string;
+  name: string;
+  isActive?: boolean;
+}
+
+export interface DeliveryLocationConfig {
+  id: string;
+  name: string;
+  fee: number;
+  time?: string;
+  isDefault?: boolean;
+  isActive?: boolean;
 }
 
 export interface AnnouncementConfig {

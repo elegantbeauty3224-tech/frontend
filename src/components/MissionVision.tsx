@@ -133,7 +133,7 @@ export const MissionVision: React.FC = React.memo(() => {
             <ShieldCheck size={20} />
           </div>
           <div>
-            <h5 className="font-bold text-slate-900 text-xs sm:text-sm">শতভাগ সততা</h5>
+            <h4 className="font-bold text-slate-900 text-xs sm:text-sm">শতভাগ সততা</h4>
             <p className="text-[10px] text-slate-500">আপসহীন কোয়ালিটি</p>
           </div>
         </div>
@@ -143,7 +143,7 @@ export const MissionVision: React.FC = React.memo(() => {
             <HeartHandshake size={20} />
           </div>
           <div>
-            <h5 className="font-bold text-slate-900 text-xs sm:text-sm">গ্রাহকবান্ধব সেবা</h5>
+            <h4 className="font-bold text-slate-900 text-xs sm:text-sm">গ্রাহকবান্ধব সেবা</h4>
             <p className="text-[10px] text-slate-500">সর্বোচ্চ সম্মান ও সহায়তা</p>
           </div>
         </div>
@@ -153,7 +153,7 @@ export const MissionVision: React.FC = React.memo(() => {
             <Truck size={20} />
           </div>
           <div>
-            <h5 className="font-bold text-slate-900 text-xs sm:text-sm">দ্রুত ডেলিভারি</h5>
+            <h4 className="font-bold text-slate-900 text-xs sm:text-sm">দ্রুত ডেলিভারি</h4>
             <p className="text-[10px] text-slate-500">সারা দেশে ক্যাশ অন ডেলিভারি</p>
           </div>
         </div>
@@ -163,7 +163,7 @@ export const MissionVision: React.FC = React.memo(() => {
             <CheckCircle2 size={20} />
           </div>
           <div>
-            <h5 className="font-bold text-slate-900 text-xs sm:text-sm">নিশ্চিন্ত কেনাকাটা</h5>
+            <h4 className="font-bold text-slate-900 text-xs sm:text-sm">নিশ্চিন্ত কেনাকাটা</h4>
             <p className="text-[10px] text-slate-500">দেখে মূল্য পরিশোধের সুযোগ</p>
           </div>
         </div>

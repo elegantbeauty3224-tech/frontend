@@ -13,6 +13,7 @@ import { LifestyleGrid } from '@/components/LifestyleGrid';
 import { MissionVision } from '@/components/MissionVision';
 import { ProductCatalog } from '@/components/ProductCatalog';
 import { CustomerReviews } from '@/components/CustomerReviews';
+import { FaqSection } from '@/components/FaqSection';
 import { OrderCtaBanner } from '@/components/OrderCtaBanner';
 import { Footer } from '@/components/Footer';
 import { CheckoutModal } from '@/components/CheckoutModal';
@@ -25,7 +26,7 @@ import { UserProfileModal } from '@/components/UserProfileModal';
 import { useAuth } from '@/context/AuthContext';
 
 // Types & Data
-import { CartItem, ProductItem, ProductVariant, AnnouncementConfig } from '@/types';
+import { CartItem, ProductItem, ProductVariant, AnnouncementConfig, DeliveryLocationConfig, CategoryConfig, ProductReview } from '@/types';
 import { fallbackProducts, productCategories } from '@/data/fallbackProducts';
 
 export default function LandingPage() {
@@ -53,7 +54,7 @@ export default function LandingPage() {
   const [completedOrder, setCompletedOrder] = useState<any>(null);
 
   // Site Origin for share links
-  const [siteOrigin, setSiteOrigin] = useState('https://elegant-beauty.xyz');
+  const [siteOrigin, setSiteOrigin] = useState('https://www.elegant-beauty.xyz');
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setSiteOrigin(window.location.origin);
@@ -97,7 +98,7 @@ export default function LandingPage() {
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const copyProductUrl = useCallback((prod: ProductItem) => {
-    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://elegant-beauty.xyz';
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://www.elegant-beauty.xyz';
     const url = `${origin}/?product=${prod.id}`;
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
       navigator.clipboard.writeText(url);
@@ -223,9 +224,25 @@ export default function LandingPage() {
 
   // Product Catalog Filtering & Pagination
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [liveCategories, setLiveCategories] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
+
+  const allCategories = useMemo(() => {
+    const cats = new Set<string>();
+    if (liveCategories.length > 0) {
+      liveCategories.forEach((c) => cats.add(c));
+    } else {
+      productCategories.forEach((c) => {
+        if (c !== 'All') cats.add(c);
+      });
+    }
+    productsList.forEach((p) => {
+      if (p.category && p.category.trim()) cats.add(p.category.trim());
+    });
+    return ['All', ...Array.from(cats)];
+  }, [liveCategories, productsList]);
 
   const filteredProducts = useMemo(() => {
     return productsList.filter((p) => {
@@ -249,7 +266,8 @@ export default function LandingPage() {
   const [customerEmail, setCustomerEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [deliveryAddress, setDeliveryAddress] = useState('');
-  const [deliveryArea, setDeliveryArea] = useState<'inside_dhaka' | 'outside_dhaka'>('inside_dhaka');
+  const [deliveryArea, setDeliveryArea] = useState<string>('inside_dhaka');
+  const [deliveryLocations, setDeliveryLocations] = useState<DeliveryLocationConfig[]>([]);
   const [paymentMethod, setPaymentMethod] = useState<'cod' | 'bkash'>('cod');
   const [notes, setNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -258,8 +276,8 @@ export default function LandingPage() {
   // Dynamic Announcement Configuration
   const [announcement, setAnnouncement] = useState<AnnouncementConfig>({
     enabled: true,
-    badgeText: 'LIMITED OFFER',
-    messageText: 'সীমিত সময়ের জন্য FLAT 50% DISCOUNT!',
+    badgeText: 'হট ডিল 🔥',
+    messageText: 'স্টক সীমিত! আপনার পছন্দের কালার বুকিং করুন এখনই!',
     phoneText: 'Call Us 01648-439277',
     phoneNumber: '01648439277',
     whatsappNumber: '8801648439277',
@@ -271,13 +289,32 @@ export default function LandingPage() {
     showWhatsapp: true,
   });
 
-  // Fetch site announcements and live database products
+  // Fetch site announcements, categories, delivery locations, and live database products
   useEffect(() => {
     fetch('/api/config')
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && data.data?.announcement) {
-          setAnnouncement(data.data.announcement);
+        if (data.success && data.data) {
+          if (data.data.announcement) {
+            setAnnouncement(data.data.announcement);
+          }
+          if (Array.isArray(data.data.deliveryLocations) && data.data.deliveryLocations.length > 0) {
+            setDeliveryLocations(data.data.deliveryLocations);
+            const defaultLoc =
+              data.data.deliveryLocations.find((l: any) => l.isDefault && l.isActive !== false) ||
+              data.data.deliveryLocations.find((l: any) => l.isActive !== false) ||
+              data.data.deliveryLocations[0];
+            if (defaultLoc) {
+              setDeliveryArea(defaultLoc.id);
+            }
+          }
+          if (Array.isArray(data.data.categories) && data.data.categories.length > 0) {
+            setLiveCategories(
+              data.data.categories
+                .filter((c: any) => c.isActive !== false)
+                .map((c: any) => c.name)
+            );
+          }
         }
       })
       .catch(() => {});
@@ -319,6 +356,7 @@ export default function LandingPage() {
                     stock: v.stock || 20,
                   }))
                 : [{ name: 'ডিফল্ট', colorCode: '#12372A', stock: 20 }],
+            reviews: Array.isArray(p.reviews) ? p.reviews : [],
           }));
           setProductsList(mapped);
 
@@ -380,7 +418,14 @@ export default function LandingPage() {
     : currentProduct
     ? currentProduct.salePrice * singleProductQty
     : 0;
-  const deliveryFee = deliveryArea === 'inside_dhaka' ? 70 : 130;
+  const activeDeliveryLoc = deliveryLocations.find(
+    (l) => l.id === deliveryArea && l.isActive !== false
+  );
+  const deliveryFee = activeDeliveryLoc
+    ? activeDeliveryLoc.fee
+    : deliveryArea === 'inside_dhaka'
+    ? 70
+    : 130;
   const totalAmount = subtotal + deliveryFee;
 
   // Navigation and Modal Helpers
@@ -418,6 +463,38 @@ export default function LandingPage() {
       window.history.replaceState(null, '', window.location.pathname);
     }
   }, []);
+
+  const handleReviewSubmitted = useCallback(
+    (productId: string, newReview: ProductReview, newRating?: number, newCount?: number) => {
+      setProductsList((prev) =>
+        prev.map((p) => {
+          if (p.id === productId) {
+            const updatedReviews = [newReview, ...(p.reviews || [])];
+            return {
+              ...p,
+              reviews: updatedReviews,
+              rating: newRating !== undefined ? newRating : p.rating,
+              reviewsCount: newCount !== undefined ? newCount : p.reviewsCount + 1,
+            };
+          }
+          return p;
+        })
+      );
+      setInspectingProduct((prev) => {
+        if (prev && prev.id === productId) {
+          const updatedReviews = [newReview, ...(prev.reviews || [])];
+          return {
+            ...prev,
+            reviews: updatedReviews,
+            rating: newRating !== undefined ? newRating : prev.rating,
+            reviewsCount: newCount !== undefined ? newCount : prev.reviewsCount + 1,
+          };
+        }
+        return prev;
+      });
+    },
+    []
+  );
 
   const selectAndOrderProduct = useCallback(
     (
@@ -586,6 +663,46 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-[#2D2A26] font-sans antialiased selection:bg-amber-100 selection:text-amber-900 pb-20 md:pb-12">
+      {/* Product JSON-LD Structured Data for Rich Snippets */}
+      {currentProduct && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org/",
+              "@type": "Product",
+              "name": currentProduct.title,
+              "image": currentProduct.image?.startsWith('http')
+                ? currentProduct.image
+                : `https://www.elegant-beauty.xyz${currentProduct.image || '/banner.jpeg'}`,
+              "description": currentProduct.description || "Elegant Beauty Premium Exclusive Collection",
+              "brand": {
+                "@type": "Brand",
+                "name": "Elegant Beauty"
+              },
+              "offers": {
+                "@type": "Offer",
+                "url": `https://www.elegant-beauty.xyz/?product=${currentProduct.id}`,
+                "priceCurrency": "BDT",
+                "price": currentProduct.salePrice,
+                "priceValidUntil": "2027-12-31",
+                "itemCondition": "https://schema.org/NewCondition",
+                "availability": "https://schema.org/InStock",
+                "seller": {
+                  "@type": "Organization",
+                  "name": "Elegant Beauty"
+                }
+              },
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": currentProduct.rating || 4.9,
+                "reviewCount": currentProduct.reviewsCount || 168
+              }
+            })
+          }}
+        />
+      )}
+
       {/* 1. TOP ANNOUNCEMENT BAR */}
       <AnnouncementBar announcement={announcement} />
 
@@ -599,7 +716,7 @@ export default function LandingPage() {
         onOpenProfile={() => setIsProfileOpen(true)}
       />
 
-      <main className="space-y-4 sm:space-y-6">
+      <main className="space-y-4 sm:space-y-6 pb-20 md:pb-8 overflow-x-hidden">
         {/* 3. HERO MARKETING BANNER */}
         <BannerSection
           onOpenLightbox={() => setIsBannerZoomed(true)}
@@ -629,7 +746,7 @@ export default function LandingPage() {
 
         {/* 8. PRODUCTS CATALOG */}
         <ProductCatalog
-          categories={productCategories}
+          categories={allCategories}
           selectedCategory={selectedCategory}
           onSelectCategory={(cat) => {
             setSelectedCategory(cat);
@@ -658,7 +775,10 @@ export default function LandingPage() {
         {/* 9. CUSTOMER REVIEWS */}
         <CustomerReviews />
 
-        {/* 10. CASH ON DELIVERY CTA BANNER */}
+        {/* 10. FREQUENTLY ASKED QUESTIONS (SEO FAQ & HIGH CONVERSION) */}
+        <FaqSection />
+
+        {/* 11. CASH ON DELIVERY CTA BANNER */}
         <OrderCtaBanner
           onOpenCheckout={() => openCheckout(cart.length > 0 ? 'cart' : 'single_product')}
           onScrollToGrid={scrollToGrid}
@@ -682,6 +802,7 @@ export default function LandingPage() {
         setDeliveryAddress={setDeliveryAddress}
         deliveryArea={deliveryArea}
         setDeliveryArea={setDeliveryArea}
+        deliveryLocations={deliveryLocations}
         notes={notes}
         setNotes={setNotes}
         paymentMethod={paymentMethod}
@@ -718,6 +839,8 @@ export default function LandingPage() {
         siteOrigin={siteOrigin}
         copiedId={copiedId}
         onCopyUrl={copyProductUrl}
+        user={user}
+        onReviewSubmitted={handleReviewSubmitted}
       />
 
       {/* 14. BANNER LIGHTBOX */}

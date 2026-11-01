@@ -97,11 +97,12 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
                 <button
                   key={i}
                   type="button"
+                  aria-label={`কালার ভ্যারিয়েন্ট: ${v.name}`}
                   onClick={(e) => {
                     e.stopPropagation();
                     onSelectVariant(product.id, v);
                   }}
-                  className={`relative w-5 h-5 rounded-full border flex items-center justify-center transition-all ${
+                  className={`relative w-5 h-5 rounded-full border flex items-center justify-center transition-transform duration-150 ${
                     isSelected
                       ? 'ring-2 ring-emerald-700 ring-offset-1 scale-110 shadow-xs'
                       : 'border-slate-300 opacity-80 hover:opacity-100 hover:scale-105'
@@ -170,6 +171,7 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
                   : 'btn-ghost border-slate-200 text-slate-500 hover:text-emerald-700 hover:bg-emerald-50'
               }`}
               title="প্রোডাক্ট লিংক কপি করুন"
+              aria-label="প্রোডাক্ট লিংক কপি করুন"
             >
               {isCopied ? <Check size={13} className="text-emerald-600" /> : <Copy size={13} />}
             </button>

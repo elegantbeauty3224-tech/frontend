@@ -172,8 +172,8 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 animate-fade-in">
-      <div className="bg-white rounded-3xl max-w-2xl w-full shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-2 sm:p-4 animate-fade-in">
+      <div className="bg-white rounded-2xl sm:rounded-3xl max-w-2xl w-full shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[92vh]">
         {/* Modal Top Header */}
         <div className="p-4 sm:p-5 border-b border-slate-200/80 bg-gradient-to-r from-emerald-950 to-[#12372A] text-white flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -285,7 +285,7 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
                 type="button"
                 onClick={handleGoogleLogin}
                 disabled={authLoading}
-                className="btn btn-sm bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 rounded-xl shadow-xs gap-2 shrink-0 font-bold"
+                className="btn btn-sm bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 rounded-xl shadow-xs gap-2 shrink-0 font-bold w-full sm:w-auto"
               >
                 {authLoading ? (
                   <RefreshCw size={14} className="animate-spin text-emerald-700" />
@@ -416,7 +416,7 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
                 <label className="block text-xs font-bold text-slate-700">
                   অর্ডার নম্বর বা মোবাইল নম্বর দিন:
                 </label>
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <div className="relative flex-1">
                     <input
                       type="text"
@@ -431,7 +431,8 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
                   <button
                     type="submit"
                     disabled={searching || !searchQuery.trim()}
-                    className="btn bg-[#12372A] hover:bg-[#1a4a39] text-white rounded-xl font-bold px-5"
+                    className="btn bg-[#12372A] hover:bg-[#1a4a39] text-white rounded-xl font-bold px-5 w-full sm:w-auto"
+                    aria-label="অর্ডার ট্র্যাক করুন"
                   >
                     {searching ? <RefreshCw size={16} className="animate-spin" /> : 'ট্র্যাক'}
                   </button>
@@ -575,9 +576,9 @@ const OrderCard: React.FC<{
 
       {/* Courier Tracking Pill (Steadfast) */}
       {order.courier?.trackingCode && (
-        <div className="p-2.5 bg-indigo-50/70 border border-indigo-200 rounded-xl flex items-center justify-between text-xs">
+        <div className="p-2.5 bg-indigo-50/70 border border-indigo-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
           <div className="flex items-center gap-2">
-            <Truck size={15} className="text-indigo-700" />
+            <Truck size={15} className="text-indigo-700 shrink-0" />
             <span className="text-indigo-950 font-bold">
               Steadfast Tracking: <span className="font-mono">{order.courier.trackingCode}</span>
             </span>
@@ -586,7 +587,7 @@ const OrderCard: React.FC<{
             href={`https://steadfast.com.bd/t/${order.courier.trackingCode}`}
             target="_blank"
             rel="noreferrer"
-            className="btn btn-xs bg-indigo-700 hover:bg-indigo-800 text-white border-0 rounded-lg gap-1 font-bold"
+            className="btn btn-xs bg-indigo-700 hover:bg-indigo-800 text-white border-0 rounded-lg gap-1 font-bold w-full sm:w-auto text-center justify-center"
           >
             <span>লাইভ ট্র্যাক</span>
             <ExternalLink size={11} />

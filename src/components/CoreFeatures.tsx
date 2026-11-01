@@ -4,6 +4,7 @@ import { Sparkles, ShieldCheck, Award, Truck } from 'lucide-react';
 export const CoreFeatures: React.FC = React.memo(() => {
   return (
     <section className="max-w-6xl mx-auto px-4 py-6">
+      <h2 className="sr-only">আমাদের প্রধান সেবাসমূহ</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white p-6 rounded-2xl border border-[#EADBC8] shadow-xs text-center space-y-2 hover:shadow-md transition-shadow">
           <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-800 mx-auto flex items-center justify-center font-bold">

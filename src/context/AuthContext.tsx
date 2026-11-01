@@ -35,17 +35,43 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!auth) {
+    const currentAuth = auth;
+    if (!currentAuth) {
       setLoading(false);
       return;
     }
 
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
-    });
+    let unsubscribe: (() => void) | null = null;
+    let isMounted = true;
 
-    return () => unsubscribe();
+    const initAuth = () => {
+      if (!isMounted) return;
+      unsubscribe = onAuthStateChanged(currentAuth, (currentUser) => {
+        if (isMounted) {
+          setUser(currentUser);
+          setLoading(false);
+        }
+      });
+    };
+
+    // Defer heavy Firebase Auth iframe until main thread is idle to eliminate 3,000ms critical path latency
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      const idleId = (window as any).requestIdleCallback(initAuth, { timeout: 2000 });
+      return () => {
+        isMounted = false;
+        if ('cancelIdleCallback' in window) {
+          (window as any).cancelIdleCallback(idleId);
+        }
+        if (unsubscribe) unsubscribe();
+      };
+    } else {
+      const timer = setTimeout(initAuth, 500);
+      return () => {
+        isMounted = false;
+        clearTimeout(timer);
+        if (unsubscribe) unsubscribe();
+      };
+    }
   }, []);
 
   const signInWithGoogle = async (): Promise<User | null> => {

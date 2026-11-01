@@ -5,15 +5,15 @@ import Image from 'next/image';
 
 export const Footer = React.memo(function Footer() {
   return (
-    <footer className="border-t border-[#EADBC8] bg-white mt-12 pt-8 pb-10 text-xs text-slate-500">
+    <footer className="border-t border-[#EADBC8] bg-white mt-12 pt-8 pb-24 sm:pb-10 text-xs text-slate-500">
       <div className="max-w-6xl mx-auto px-4">
         {/* Main Footer Information */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left pb-6 border-b border-slate-100">
           <div className="flex items-center gap-2.5">
-            <Image src="/logo-light.jpeg" alt="Logo" width={34} height={34} className="rounded-full object-cover" />
+            <Image src="/logo-light.jpeg" alt="Elegant Beauty Logo" width={34} height={34} className="rounded-full object-cover" />
             <div>
               <p className="font-bold text-slate-900 text-sm">Elegant Beauty</p>
-              <p className="text-[11px] text-slate-500">Quality Products ❤️ Trusted Service</p>
+              <p className="text-[11px] text-slate-600">Quality Products ❤️ Trusted Service</p>
             </div>
           </div>
 
@@ -30,7 +30,7 @@ export const Footer = React.memo(function Footer() {
 
         {/* Developer Credit & Branding */}
         <div className="pt-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
-          <p className="text-[11px] text-slate-400">
+          <p className="text-[11px] text-slate-500 font-medium">
             বাংলাদেশের বিশ্বস্ত এবং প্রিমিয়াম কোয়ালিটি ই-কমার্স শপ
           </p>
 
@@ -42,10 +42,11 @@ export const Footer = React.memo(function Footer() {
               rel="noopener noreferrer"
               className="inline-flex items-center px-3 py-1.5 rounded-xl bg-slate-950 hover:bg-[#12372A] border border-slate-800 hover:border-cyan-500/50 shadow-xs hover:shadow-md transition-all duration-200 transform hover:-translate-y-0.5 group"
               title="HeroStack Facebook Page"
+              aria-label="HeroStack Facebook Page"
             >
               <Image
                 src="/herostack-logo.png"
-                alt="HeroStack"
+                alt="HeroStack Tech & Web Solutions"
                 width={105}
                 height={35}
                 className="h-6 w-auto object-contain transition-transform group-hover:scale-105"

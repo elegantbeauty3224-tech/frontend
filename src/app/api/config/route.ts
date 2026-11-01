@@ -3,8 +3,8 @@ import { NextResponse } from 'next/server';
 const defaultConfig = {
   announcement: {
     enabled: true,
-    badgeText: 'LIMITED OFFER',
-    messageText: 'সীমিত সময়ের জন্য FLAT 50% DISCOUNT!',
+    badgeText: 'হট ডিল 🔥',
+    messageText: 'স্টক সীমিত! আপনার পছন্দের কালার বুকিং করুন এখনই!',
     phoneText: 'Call Us 01648-439277',
     phoneNumber: '01648439277',
     whatsappNumber: '8801648439277',
@@ -15,6 +15,18 @@ const defaultConfig = {
     showPhone: true,
     showWhatsapp: true,
   },
+  categories: [
+    { id: 'clothing', name: 'Clothing', isActive: true },
+    { id: 'bags', name: 'Bags', isActive: true },
+    { id: 'luggage', name: 'Luggage', isActive: true },
+    { id: 'kids-baby', name: 'Kids & Baby', isActive: true },
+    { id: 'beauty', name: 'Beauty Products', isActive: true },
+    { id: 'general', name: 'General', isActive: true },
+  ],
+  deliveryLocations: [
+    { id: 'inside_dhaka', name: 'ঢাকার ভিতরে', fee: 70, time: '২৪ থেকে ৪৮ ঘণ্টা', isDefault: true, isActive: true },
+    { id: 'outside_dhaka', name: 'ঢাকার বাইরে', fee: 130, time: '২ থেকে ৩ দিন', isDefault: false, isActive: true },
+  ],
 };
 
 export async function GET() {

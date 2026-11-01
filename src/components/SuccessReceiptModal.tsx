@@ -29,7 +29,7 @@ export const SuccessReceiptModal = React.memo(function SuccessReceiptModal({
 
   return (
     <div className="modal modal-open z-50">
-      <div className="modal-box max-w-lg bg-white text-slate-800 p-6 sm:p-8 rounded-3xl shadow-2xl animate-fade-in">
+      <div className="modal-box w-[96%] sm:w-[92%] max-w-lg bg-white text-slate-800 p-4 sm:p-8 rounded-2xl sm:rounded-3xl shadow-2xl animate-fade-in">
         <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-800 mx-auto flex items-center justify-center mb-4">
           <CheckCircle2 size={36} />
         </div>
@@ -56,14 +56,14 @@ export const SuccessReceiptModal = React.memo(function SuccessReceiptModal({
           <div className="space-y-1.5 border-b border-slate-200 pb-2">
             <span className="text-slate-500 block font-semibold">অর্ডারকৃত পণ্যসমূহ:</span>
             {order.items?.map((it, idx) => (
-              <div key={idx} className="flex justify-between items-center text-slate-800">
-                <span className="truncate max-w-[220px]">
+              <div key={idx} className="flex justify-between items-center text-slate-800 gap-2">
+                <span className="truncate max-w-[150px] sm:max-w-[220px]">
                   {it.productTitle}{' '}
                   <span className="text-slate-500 text-[10px]">
                     ({it.variantName} × {it.quantity})
                   </span>
                 </span>
-                <span className="font-mono font-bold">৳{it.totalPrice}</span>
+                <span className="font-mono font-bold shrink-0">৳{it.totalPrice}</span>
               </div>
             ))}
           </div>
@@ -86,13 +86,13 @@ export const SuccessReceiptModal = React.memo(function SuccessReceiptModal({
             )}`}
             target="_blank"
             rel="noreferrer"
-            className="btn btn-sm sm:btn-md bg-[#25D366] hover:bg-[#20ba59] text-white border-0 flex-1 gap-1.5"
+            className="btn btn-sm sm:btn-md bg-[#25D366] hover:bg-[#20ba59] text-white border-0 flex-1 w-full sm:w-auto gap-1.5"
           >
             <MessageCircle size={16} /> হোয়াটসঅ্যাপে যোগাযোগ
           </a>
           <button
             onClick={onClose}
-            className="btn btn-sm sm:btn-md btn-neutral"
+            className="btn btn-sm sm:btn-md btn-neutral flex-1 sm:flex-none w-full sm:w-auto"
           >
             ঠিক আছে
           </button>

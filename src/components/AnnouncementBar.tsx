@@ -15,10 +15,10 @@ export const AnnouncementBar: React.FC<AnnouncementBarProps> = ({ announcement }
         backgroundColor: announcement.themeColor || '#12372A',
         color: announcement.textColor || '#FFFFFF',
       }}
-      className="py-2.5 px-4 shadow-sm border-b border-black/15 transition-colors"
+      className="py-2 px-4 shadow-sm border-b border-black/15 transition-colors min-h-[42px] flex items-center"
     >
-      <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs sm:text-sm">
-        <div className="flex items-center gap-2">
+      <div className="max-w-6xl w-full mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs sm:text-sm">
+        <div className="flex items-center gap-2 min-h-[26px]">
           {announcement.badgeText && (
             <span
               style={{

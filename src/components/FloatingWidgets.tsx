@@ -72,7 +72,7 @@ export const FloatingWidgets = React.memo(function FloatingWidgets({
         </button>
 
         <div className="min-w-0 flex-1">
-          <div className="text-[10px] text-slate-400">সর্বমোট (COD):</div>
+          <div className="text-[10px] text-slate-600 font-semibold">সর্বমোট (COD):</div>
           <div className="text-base font-black text-[#12372A] font-mono leading-none truncate">
             ৳{totalAmount}
           </div>

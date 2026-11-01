@@ -27,11 +27,11 @@ export const OrderCtaBanner: React.FC<OrderCtaBannerProps> = React.memo(({
           <p className="text-emerald-100/90 text-xs sm:text-sm max-w-lg mx-auto">
             কোনো অগ্রিম পেমেন্ট ছাড়া সারা দেশে দ্রুত ক্যাশ অন ডেলিভারি। পণ্য দেখে নিশ্চিত হয়ে ডেলিভারি ম্যানকে মূল্য পরিশোধ করুন।
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5 sm:gap-3 pt-2 w-full max-w-sm sm:max-w-none mx-auto">
             <button
               type="button"
               onClick={onOpenCheckout}
-              className="btn btn-md sm:btn-lg bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 font-black px-8 rounded-2xl border-0 shadow-lg hover:shadow-2xl gap-2 transition-all transform hover:-translate-y-0.5"
+              className="btn btn-md sm:btn-lg bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 font-black px-6 sm:px-8 rounded-2xl border-0 shadow-lg hover:shadow-2xl gap-2 transition-all transform hover:-translate-y-0.5 w-full sm:w-auto"
             >
               <ShoppingBag size={18} />
               এখনই অর্ডার করুন (ক্যাশ অন ডেলিভারি)
@@ -39,7 +39,7 @@ export const OrderCtaBanner: React.FC<OrderCtaBannerProps> = React.memo(({
             <button
               type="button"
               onClick={onScrollToGrid}
-              className="btn btn-md sm:btn-lg btn-outline border-white/30 text-white hover:bg-white hover:text-slate-950 font-bold rounded-2xl"
+              className="btn btn-md sm:btn-lg btn-outline border-white/30 text-white hover:bg-white hover:text-slate-950 font-bold rounded-2xl w-full sm:w-auto"
             >
               অন্যান্য পণ্য দেখুন
             </button>

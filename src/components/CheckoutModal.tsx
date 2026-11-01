@@ -5,7 +5,7 @@ import {
   Mail, MapPin, AlertCircle, FileText, ShoppingCart, Plus, Minus,
   Trash2, Check, Lock, X
 } from 'lucide-react';
-import { CartItem, ProductItem, ProductVariant } from '../types';
+import { CartItem, ProductItem, ProductVariant, DeliveryLocationConfig } from '../types';
 import { useAuth } from '../context/AuthContext';
 
 interface CheckoutModalProps {
@@ -20,8 +20,9 @@ interface CheckoutModalProps {
   setCustomerEmail: (val: string) => void;
   deliveryAddress: string;
   setDeliveryAddress: (val: string) => void;
-  deliveryArea: 'inside_dhaka' | 'outside_dhaka';
-  setDeliveryArea: (val: 'inside_dhaka' | 'outside_dhaka') => void;
+  deliveryArea: string;
+  setDeliveryArea: (val: string) => void;
+  deliveryLocations?: DeliveryLocationConfig[];
   notes: string;
   setNotes: (val: string) => void;
   paymentMethod: 'cod' | 'bkash';
@@ -62,6 +63,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   setDeliveryAddress,
   deliveryArea,
   setDeliveryArea,
+  deliveryLocations,
   notes,
   setNotes,
   paymentMethod,
@@ -103,8 +105,8 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="modal modal-open backdrop-blur-sm z-50 animate-fade-in p-2 sm:p-4">
-      <div className="modal-box max-w-4xl max-h-[92vh] overflow-y-auto custom-scrollbar bg-white text-slate-800 p-5 sm:p-8 rounded-3xl shadow-2xl relative border border-slate-100">
+    <div className="modal modal-open backdrop-blur-sm z-50 animate-fade-in p-1 sm:p-4">
+      <div className="modal-box w-[98%] sm:w-[92%] max-w-4xl max-h-[94vh] sm:max-h-[92vh] overflow-y-auto custom-scrollbar bg-white text-slate-800 p-3.5 sm:p-8 rounded-2xl sm:rounded-3xl shadow-2xl relative border border-slate-100">
         {/* Modal Header & Close Button */}
         <div className="flex justify-between items-start border-b border-slate-200 pb-3 mb-6">
           <div className="space-y-1">
@@ -187,16 +189,16 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 </span>
               </div>
             ) : (
-              <div className="bg-gradient-to-r from-emerald-50 via-teal-50 to-amber-50 border-2 border-emerald-400 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs animate-fade-in">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-[#12372A] text-white flex items-center justify-center shrink-0 shadow-xs">
-                    <Lock size={18} className="text-amber-300" />
+              <div className="bg-gradient-to-r from-emerald-50 via-teal-50 to-amber-50 border-2 border-emerald-400 rounded-2xl p-3 sm:p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs animate-fade-in">
+                <div className="flex items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-[#12372A] text-white flex items-center justify-center shrink-0 shadow-xs">
+                    <Lock size={17} className="text-amber-300" />
                   </div>
-                  <div>
-                    <h5 className="font-extrabold text-slate-900 text-sm">
+                  <div className="min-w-0 flex-1">
+                    <h5 className="font-extrabold text-slate-900 text-xs sm:text-sm">
                       অর্ডার করতে লগইন আবশ্যক
                     </h5>
-                    <p className="text-xs text-slate-600 mt-0.5">
+                    <p className="text-[11px] sm:text-xs text-slate-600 mt-0.5">
                       অর্ডার সম্পন্ন ও ট্র্যাক করতে ১-ক্লিকে Google দিয়ে লগইন করুন
                     </p>
                   </div>
@@ -204,7 +206,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 <button
                   type="button"
                   onClick={signInWithGoogle}
-                  className="btn btn-sm bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 hover:border-emerald-600 rounded-xl font-bold gap-2 shadow-xs shrink-0"
+                  className="btn btn-sm bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 hover:border-emerald-600 rounded-xl font-bold gap-2 shadow-xs w-full sm:w-auto shrink-0 justify-center text-xs"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24">
                     <path
@@ -339,51 +341,46 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 ডেলিভারি এরিয়া নির্বাচন করুন:
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <label
-                  className={`cursor-pointer p-3.5 rounded-2xl border-2 flex items-center justify-between transition-all duration-200 ${
-                    deliveryArea === 'inside_dhaka'
-                      ? 'border-[#12372A] bg-emerald-50/80 shadow-xs'
-                      : 'border-slate-200 bg-slate-50 hover:bg-white'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5">
-                    <input
-                      type="radio"
-                      name="modalDeliveryArea"
-                      checked={deliveryArea === 'inside_dhaka'}
-                      onChange={() => setDeliveryArea('inside_dhaka')}
-                      className="radio radio-sm radio-success"
-                    />
-                    <div>
-                      <div className="font-bold text-xs sm:text-sm text-slate-900">ঢাকার ভেতরে</div>
-                      <div className="text-[11px] text-slate-500">হোম ডেলিভারি চার্জ ৳৭০</div>
-                    </div>
-                  </div>
-                  <span className="text-sm font-black font-mono text-emerald-800">৳৭০</span>
-                </label>
-
-                <label
-                  className={`cursor-pointer p-3.5 rounded-2xl border-2 flex items-center justify-between transition-all duration-200 ${
-                    deliveryArea === 'outside_dhaka'
-                      ? 'border-[#12372A] bg-emerald-50/80 shadow-xs'
-                      : 'border-slate-200 bg-slate-50 hover:bg-white'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5">
-                    <input
-                      type="radio"
-                      name="modalDeliveryArea"
-                      checked={deliveryArea === 'outside_dhaka'}
-                      onChange={() => setDeliveryArea('outside_dhaka')}
-                      className="radio radio-sm radio-success"
-                    />
-                    <div>
-                      <div className="font-bold text-xs sm:text-sm text-slate-900">ঢাকার বাইরে</div>
-                      <div className="text-[11px] text-slate-500">কুরিয়ার হোম ডেলিভারি ৳১৩০</div>
-                    </div>
-                  </div>
-                  <span className="text-sm font-black font-mono text-emerald-800">৳১৩০</span>
-                </label>
+                {((deliveryLocations && deliveryLocations.filter(l => l.isActive !== false).length > 0)
+                  ? deliveryLocations.filter(l => l.isActive !== false)
+                  : [
+                      { id: 'inside_dhaka', name: 'ঢাকার ভেতরে', fee: 70, time: '২৪ থেকে ৪৮ ঘণ্টা' },
+                      { id: 'outside_dhaka', name: 'ঢাকার বাইরে', fee: 130, time: '২ থেকে ৩ দিন' },
+                    ]
+                ).map((loc) => {
+                  const isSelected = deliveryArea === loc.id;
+                  return (
+                    <label
+                      key={loc.id}
+                      className={`cursor-pointer p-3.5 rounded-2xl border-2 flex items-center justify-between transition-all duration-200 ${
+                        isSelected
+                          ? 'border-[#12372A] bg-emerald-50/80 shadow-xs ring-1 ring-emerald-600/30'
+                          : 'border-slate-200 bg-slate-50 hover:bg-white'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <input
+                          type="radio"
+                          name="modalDeliveryArea"
+                          checked={isSelected}
+                          onChange={() => setDeliveryArea(loc.id)}
+                          className="radio radio-sm radio-success"
+                          aria-label={`${loc.name} ডেলিভারি চার্জ ৳${loc.fee}`}
+                        />
+                        <div>
+                          <div className="font-bold text-xs sm:text-sm text-slate-900">{loc.name}</div>
+                          <div className="text-[11px] text-slate-500">
+                            {loc.fee === 0 ? 'ফ্রি ডেলিভারি' : `হোম ডেলিভারি চার্জ ৳${loc.fee}`}
+                            {loc.time ? ` (${loc.time})` : ''}
+                          </div>
+                        </div>
+                      </div>
+                      <span className="text-sm font-black font-mono text-emerald-800">
+                        {loc.fee === 0 ? 'ফ্রি' : `৳${loc.fee}`}
+                      </span>
+                    </label>
+                  );
+                })}
               </div>
             </div>
 
@@ -453,6 +450,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                               type="button"
                               onClick={() => onUpdateCartQuantity(item.cartItemId, -1)}
                               className="text-slate-500 hover:text-black font-bold px-1"
+                              aria-label="পরিমাণ কমান"
                             >
                               -
                             </button>
@@ -461,6 +459,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                               type="button"
                               onClick={() => onUpdateCartQuantity(item.cartItemId, 1)}
                               className="text-slate-500 hover:text-black font-bold px-1"
+                              aria-label="পরিমাণ বাড়ান"
                             >
                               +
                             </button>
@@ -475,6 +474,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                         onClick={() => onRemoveFromCart(item.cartItemId)}
                         className="btn btn-xs btn-ghost btn-circle text-slate-400 hover:text-red-500"
                         title="মুছে ফেলুন"
+                        aria-label="পণ্যটি মুছে ফেলুন"
                       >
                         <Trash2 size={13} />
                       </button>
@@ -515,6 +515,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                             type="button"
                             onClick={() => setSingleProductQty((q) => Math.max(1, q - 1))}
                             className="btn btn-xs btn-square btn-ghost h-5 w-5 text-slate-600 hover:bg-slate-100"
+                            aria-label="পরিমাণ কমান"
                           >
                             <Minus size={10} />
                           </button>
@@ -525,6 +526,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                             type="button"
                             onClick={() => setSingleProductQty((q) => q + 1)}
                             className="btn btn-xs btn-square btn-ghost h-5 w-5 text-slate-600 hover:bg-slate-100"
+                            aria-label="পরিমাণ বাড়ান"
                           >
                             <Plus size={10} />
                           </button>
@@ -707,7 +709,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
                   />
                 </svg>
-                <span>Google দিয়ে লগইন করে অর্ডার করুন - ৳{totalAmount}</span>
+                <span className="text-xs sm:text-sm">Google লগইন করে অর্ডার করুন - ৳{totalAmount}</span>
               </button>
             )}
 

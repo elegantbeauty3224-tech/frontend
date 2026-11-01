@@ -41,20 +41,21 @@ export const HeroIntro: React.FC<HeroIntroProps> = ({
 
       {/* Quick Color Picker in Hero */}
       {currentProduct && selectedVariant && (
-        <div className="pt-2 flex flex-col items-center gap-2">
+        <div className="pt-2 flex flex-col items-center gap-2 min-h-[76px] justify-center">
           <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
             <span>পছন্দের কালার বাছাই করুন:</span>
             <span className="text-emerald-800 font-extrabold">{selectedVariant.name}</span>
           </span>
-          <div className="flex flex-wrap items-center justify-center gap-2">
+          <div className="flex flex-wrap items-center justify-center gap-2 min-h-[38px]">
             {(currentProduct.variants || []).map((v, i) => {
               const isSelected = selectedVariant.name === v.name;
               return (
                 <button
-                  key={i}
+                  key={v.name || i}
                   type="button"
+                  aria-label={`কালার নির্বাচন করুন: ${v.name}`}
                   onClick={() => onSelectVariant(v)}
-                  className={`group relative px-3 py-1.5 rounded-xl border flex items-center gap-2 transition-all duration-200 ${
+                  className={`group relative px-3 py-1.5 rounded-xl border flex items-center gap-2 transition-transform duration-150 ${
                     isSelected
                       ? 'border-[#12372A] bg-emerald-50/80 ring-2 ring-[#12372A]/20 shadow-xs scale-105'
                       : 'border-slate-200 bg-white hover:border-slate-300'
@@ -73,11 +74,11 @@ export const HeroIntro: React.FC<HeroIntroProps> = ({
         </div>
       )}
 
-      <div className="flex flex-wrap items-center justify-center gap-3 pt-3">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5 sm:gap-3 pt-3 w-full max-w-sm sm:max-w-none mx-auto">
         <button
           type="button"
           onClick={onOrderNow}
-          className="btn btn-md sm:btn-lg bg-[#12372A] hover:bg-[#1c4e3c] text-white font-extrabold px-6 rounded-xl shadow-lg hover:shadow-xl border-0 gap-2 transition-all transform hover:-translate-y-0.5"
+          className="btn btn-md sm:btn-lg bg-[#12372A] hover:bg-[#1c4e3c] text-white font-extrabold px-6 rounded-xl shadow-lg hover:shadow-xl border-0 gap-2 transition-all transform hover:-translate-y-0.5 w-full sm:w-auto"
         >
           <ShoppingBag size={18} className="text-amber-300" />
           এখনই অর্ডার করুন
@@ -86,7 +87,7 @@ export const HeroIntro: React.FC<HeroIntroProps> = ({
         <button
           type="button"
           onClick={onAddToCart}
-          className="btn btn-md sm:btn-lg bg-amber-400 hover:bg-amber-500 text-slate-950 font-extrabold px-6 rounded-xl shadow-md border-0 gap-2 transition-all transform hover:-translate-y-0.5"
+          className="btn btn-md sm:btn-lg bg-amber-400 hover:bg-amber-500 text-slate-950 font-extrabold px-6 rounded-xl shadow-md border-0 gap-2 transition-all transform hover:-translate-y-0.5 w-full sm:w-auto"
         >
           <ShoppingCart size={18} />
           কার্টে যোগ করুন
@@ -95,7 +96,7 @@ export const HeroIntro: React.FC<HeroIntroProps> = ({
         <button
           type="button"
           onClick={onScrollToGrid}
-          className="btn btn-md sm:btn-lg btn-outline border-[#12372A] text-[#12372A] hover:bg-[#12372A] hover:text-white font-bold px-6 rounded-xl"
+          className="btn btn-md sm:btn-lg btn-outline border-[#12372A] text-[#12372A] hover:bg-[#12372A] hover:text-white font-bold px-6 rounded-xl w-full sm:w-auto"
         >
           কালেকশন দেখুন (Grid)
         </button>

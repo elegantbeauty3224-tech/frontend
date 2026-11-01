@@ -66,6 +66,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
           <input
             type="text"
             placeholder="পণ্য খুঁজুন..."
+            aria-label="পণ্য খুঁজুন"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             className="input input-sm input-bordered w-full pl-9 rounded-xl bg-white border-slate-300 text-xs text-slate-800"
@@ -119,19 +120,21 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
 
       {/* PAGINATION CONTROLS */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between border-t border-slate-200 mt-8 pt-4">
-          <div className="text-xs text-slate-500">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-200 mt-8 pt-4">
+          <div className="text-xs text-slate-500 text-center sm:text-left">
             পৃষ্ঠা <strong className="text-slate-900">{currentPage}</strong> / {totalPages} (মোট {totalFilteredCount} টি পণ্য)
           </div>
 
-          <div className="flex gap-1.5">
+          <div className="flex flex-wrap items-center justify-center gap-1.5">
             <button
               type="button"
               onClick={() => onPageChange((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="btn btn-sm btn-outline border-slate-300 text-xs gap-1 disabled:opacity-40"
+              className="btn btn-xs sm:btn-sm btn-outline border-slate-300 text-xs gap-1 disabled:opacity-40"
             >
-              <ChevronLeft size={14} /> আগের পাতা
+              <ChevronLeft size={14} />
+              <span className="hidden sm:inline">আগের পাতা</span>
+              <span className="sm:hidden">আগে</span>
             </button>
 
             {[...Array(totalPages)].map((_, i) => (
@@ -139,7 +142,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                 key={i}
                 type="button"
                 onClick={() => onPageChange(i + 1)}
-                className={`btn btn-sm text-xs font-bold ${
+                className={`btn btn-xs sm:btn-sm text-xs font-bold ${
                   currentPage === i + 1 ? 'btn-neutral bg-[#12372A] text-white' : 'btn-ghost'
                 }`}
               >
@@ -151,9 +154,11 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
               type="button"
               onClick={() => onPageChange((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="btn btn-sm btn-outline border-slate-300 text-xs gap-1 disabled:opacity-40"
+              className="btn btn-xs sm:btn-sm btn-outline border-slate-300 text-xs gap-1 disabled:opacity-40"
             >
-              পরবর্তী পাতা <ChevronRight size={14} />
+              <span className="hidden sm:inline">পরবর্তী পাতা</span>
+              <span className="sm:hidden">পরে</span>
+              <ChevronRight size={14} />
             </button>
           </div>
         </div>

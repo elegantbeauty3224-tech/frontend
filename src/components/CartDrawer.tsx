@@ -38,7 +38,7 @@ export const CartDrawer = React.memo(function CartDrawer({
         className="absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-300 animate-fade-in"
       ></div>
 
-      <div className="fixed inset-y-0 right-0 max-w-full flex pl-8">
+      <div className="fixed inset-y-0 right-0 max-w-full flex pl-0 sm:pl-8">
         <div className="w-screen max-w-md bg-white shadow-2xl flex flex-col justify-between animate-slide-in-right">
           {/* Drawer Header */}
           <div className="p-4 sm:p-5 border-b border-slate-200 flex items-center justify-between bg-gradient-to-r from-emerald-950 to-[#12372A] text-white">

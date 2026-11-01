@@ -58,6 +58,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={onOpenProfile}
             className="btn btn-xs sm:btn-sm btn-ghost text-slate-700 hover:text-emerald-800 hover:bg-emerald-50 rounded-xl font-bold gap-1 px-2 sm:px-3"
             title="আপনার অর্ডার ট্র্যাক করুন"
+            aria-label="আপনার অর্ডার ট্র্যাক করুন"
           >
             <Package size={14} className="text-emerald-700" />
             <span className="hidden sm:inline">অর্ডার ট্র্যাক</span>
@@ -70,6 +71,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={onOpenProfile}
               className="btn btn-xs sm:btn-sm bg-emerald-50 hover:bg-emerald-100/80 text-emerald-950 border border-emerald-300 rounded-xl font-bold gap-1.5 p-1 sm:px-2.5 shadow-2xs"
               title={`${user.displayName || 'User'} - প্রোফাইল ও অর্ডার ট্র্যাক`}
+              aria-label={`${user.displayName || 'ব্যবহারকারী'} প্রোফাইল ও অর্ডার`}
             >
               <div className="relative w-5 h-5 sm:w-6 sm:h-6 rounded-full overflow-hidden bg-emerald-700 text-white shrink-0">
                 {user.photoURL ? (
@@ -100,6 +102,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={onOpenProfile}
               className="btn btn-xs sm:btn-sm bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 rounded-xl font-bold gap-1.5 shadow-2xs"
               title="Google দিয়ে লগইন করুন"
+              aria-label="Google দিয়ে লগইন করুন"
             >
               <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24">
                 <path
@@ -140,6 +143,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               cartBump ? 'scale-110 ring-2 ring-emerald-500' : ''
             }`}
             title="শপিং ব্যাগ দেখুন"
+            aria-label={`শপিং ব্যাগ দেখুন (${cartTotalItems} টি পণ্য)`}
           >
             <ShoppingCart size={14} className="text-emerald-700" />
             <span className="hidden sm:inline">ব্যাগ</span>

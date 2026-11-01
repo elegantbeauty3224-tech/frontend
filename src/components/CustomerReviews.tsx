@@ -23,8 +23,8 @@ export const CustomerReviews: React.FC = React.memo(() => {
             "খুবই রিফ্রেশিং ও চমৎকার কালেকশন! কাপড়ের কোয়ালিটি অত্যন্ত উন্নত এবং ছবির সাথে হুবহু মিল পেয়েছি। ডেলিভারি মাত্র ২৪ ঘণ্টায় পেয়েছি।"
           </p>
           <div className="border-t border-slate-100 pt-2">
-            <h4 className="font-bold text-slate-900 text-sm">আসিফ ইকবাল</h4>
-            <p className="text-[10px] text-slate-400 font-mono tracking-wider">DHAKA</p>
+            <h3 className="font-bold text-slate-900 text-sm">আসিফ ইকবাল</h3>
+            <p className="text-[10px] text-slate-500 font-mono tracking-wider font-semibold">DHAKA</p>
           </div>
         </div>
 
@@ -38,8 +38,8 @@ export const CustomerReviews: React.FC = React.memo(() => {
             "ক্যাশ অন ডেলিভারিতে প্রোডাক্ট হাতে পেয়ে চেক করে পেমেন্ট করেছি। কোনো সমস্যা ছাড়াই পারফেক্ট জিনিস পেয়েছি। ফুল স্যাটিসফাইড।"
           </p>
           <div className="border-t border-slate-100 pt-2">
-            <h4 className="font-bold text-slate-900 text-sm">তানজিম</h4>
-            <p className="text-[10px] text-slate-400 font-mono tracking-wider">SYLHET</p>
+            <h3 className="font-bold text-slate-900 text-sm">তানজিম</h3>
+            <p className="text-[10px] text-slate-500 font-mono tracking-wider font-semibold">SYLHET</p>
           </div>
         </div>
 
@@ -53,8 +53,8 @@ export const CustomerReviews: React.FC = React.memo(() => {
             "আমি কড়া কাজ একদমই পছন্দ করি না। এর ডিজাইনটা ঠিক যেমন চাচ্ছিলাম—একদম মার্জিত আর আভিজাত্য মেশানো। ৫/৫ রেটিং।"
           </p>
           <div className="border-t border-slate-100 pt-2">
-            <h4 className="font-bold text-slate-900 text-sm">রাবেয়া বসরী</h4>
-            <p className="text-[10px] text-slate-400 font-mono tracking-wider">CHATTOGRAM</p>
+            <h3 className="font-bold text-slate-900 text-sm">রাবেয়া বসরী</h3>
+            <p className="text-[10px] text-slate-500 font-mono tracking-wider font-semibold">CHATTOGRAM</p>
           </div>
         </div>
       </div>

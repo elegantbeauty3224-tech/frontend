@@ -30,6 +30,7 @@ export const BannerLightbox = React.memo(function BannerLightbox({
             src="/banner.jpeg"
             alt="Full Banner"
             fill
+            sizes="(max-width: 1024px) 100vw, 1024px"
             className="object-contain"
           />
         </div>

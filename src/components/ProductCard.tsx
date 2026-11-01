@@ -43,8 +43,8 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
         className="relative aspect-[4/3] bg-slate-100 overflow-hidden cursor-pointer"
       >
         <Image
-          src={product.image || '/banner.jpeg'}
-          alt={product.title || 'Product'}
+          src={selectedCardVariant?.image || product.image || '/banner.jpeg'}
+          alt={`${product.title} - ${variantDisplayName}`}
           fill
           unoptimized
           className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -65,11 +65,21 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
 
       <div className="p-4 space-y-2.5 flex-1 flex flex-col justify-between">
         <div>
-          <div className="flex items-center gap-1.5 text-[11px] mb-1">
-            <Star size={12} className="fill-amber-400 text-amber-500" />
-            <span className="font-extrabold text-amber-900">{product.rating}</span>
-            <span className="text-slate-600 font-medium">({product.reviewsCount})</span>
-          </div>
+          {product.reviewsCount > 0 ? (
+            <div className="flex items-center gap-1.5 text-[11px] mb-1">
+              <Star size={12} className="fill-amber-400 text-amber-500" />
+              <span className="font-extrabold text-amber-900">{product.rating}</span>
+              <span className="text-slate-600 font-medium">({product.reviewsCount} রিভিউ)</span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-1.5 text-[11px] mb-1">
+              <Star size={12} className="text-slate-300" />
+              <span className="text-slate-500 font-medium text-[10px]">০ রিভিউ</span>
+              <span className="text-[9px] font-bold text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                নতুন পণ্য
+              </span>
+            </div>
+          )}
 
           <h3
             onClick={() => onOpenDetails(product, selectedCardVariant)}
@@ -82,37 +92,49 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
           </p>
         </div>
 
-        {/* Interactive Color Swatches on Card */}
+        {/* Interactive Color Selection on Card */}
         <div className="pt-2">
-          <div className="flex justify-between items-center text-[11px] mb-1.5">
-            <span className="font-semibold text-slate-500">কালার নির্বাচন:</span>
-            <span className="font-bold text-emerald-800 text-[10px] truncate max-w-[130px]">
-              {variantDisplayName}
+          <div className="flex justify-between items-center text-xs mb-1.5">
+            <span className="font-bold text-slate-700 flex items-center gap-1">
+              <span>কালার:</span>
+              <span className="text-emerald-800 font-extrabold">{variantDisplayName}</span>
             </span>
+            <span className="text-[10px] text-slate-400">ছবি পরিবর্তন করতে ক্লিক করুন</span>
           </div>
+
           <div className="flex items-center gap-1.5 flex-wrap">
             {(product.variants || []).map((v, i) => {
               const isSelected = selectedCardVariant?.name === v.name;
+              const cleanName = v.name ? v.name.split(' (')[0] : 'ডিফল্ট';
               return (
                 <button
                   key={i}
                   type="button"
-                  aria-label={`কালার ভ্যারিয়েন্ট: ${v.name}`}
+                  aria-label={`কালার নির্বাচন করুন: ${v.name}`}
                   onClick={(e) => {
                     e.stopPropagation();
                     onSelectVariant(product.id, v);
                   }}
-                  className={`relative w-5 h-5 rounded-full border flex items-center justify-center transition-transform duration-150 ${
+                  className={`group relative inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl border text-[11px] font-semibold transition-all duration-200 cursor-pointer ${
                     isSelected
-                      ? 'ring-2 ring-emerald-700 ring-offset-1 scale-110 shadow-xs'
-                      : 'border-slate-300 opacity-80 hover:opacity-100 hover:scale-105'
+                      ? 'border-[#12372A] bg-emerald-50 text-[#12372A] ring-2 ring-[#12372A]/20 shadow-xs scale-102 font-bold'
+                      : 'border-slate-200 bg-white hover:border-slate-300 text-slate-700 hover:bg-slate-50'
                   }`}
-                  style={{ backgroundColor: v.colorCode }}
                   title={`${v.name} (স্টক: ${v.stock})`}
                 >
-                  {isSelected && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-white shadow-xs"></span>
+                  {/* Color dot or thumbnail */}
+                  {v.image ? (
+                    <span className="relative w-4 h-4 rounded-full overflow-hidden border border-slate-300 shrink-0 shadow-2xs">
+                      <img src={v.image} alt={v.name} className="w-full h-full object-cover" />
+                    </span>
+                  ) : (
+                    <span
+                      className="w-3.5 h-3.5 rounded-full border border-black/15 shrink-0 shadow-2xs"
+                      style={{ backgroundColor: v.colorCode }}
+                    ></span>
                   )}
+                  <span>{cleanName}</span>
+                  {isSelected && <Check size={11} className="text-emerald-700 stroke-[2.5]" />}
                 </button>
               );
             })}

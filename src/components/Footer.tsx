@@ -40,16 +40,16 @@ export const Footer = React.memo(function Footer() {
               href="https://www.facebook.com/HeroStack"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center px-3 py-1.5 rounded-xl bg-slate-950 hover:bg-[#12372A] border border-slate-800 hover:border-cyan-500/50 shadow-xs hover:shadow-md transition-all duration-200 transform hover:-translate-y-0.5 group"
+              className="inline-flex items-center px-3.5 py-1.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 hover:border-emerald-500 shadow-xs hover:shadow-md transition-all duration-200 transform hover:-translate-y-0.5 group"
               title="HeroStack Facebook Page"
               aria-label="HeroStack Facebook Page"
             >
               <Image
-                src="/herostack-logo.png"
+                src="/ChatGPT Image Nov 1, 2026, 07_09_48 PM-5.png"
                 alt="HeroStack Tech & Web Solutions"
-                width={105}
-                height={35}
-                className="h-6 w-auto object-contain transition-transform group-hover:scale-105"
+                width={154}
+                height={70}
+                className="h-9 sm:h-10 w-auto object-contain transition-transform group-hover:scale-105"
                 priority={false}
               />
             </a>

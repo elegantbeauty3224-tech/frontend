@@ -55,18 +55,24 @@ export const HeroIntro: React.FC<HeroIntroProps> = ({
                   type="button"
                   aria-label={`কালার নির্বাচন করুন: ${v.name}`}
                   onClick={() => onSelectVariant(v)}
-                  className={`group relative px-3 py-1.5 rounded-xl border flex items-center gap-2 transition-transform duration-150 ${
+                  className={`group relative px-3 py-1.5 rounded-xl border flex items-center gap-2 transition-all cursor-pointer ${
                     isSelected
-                      ? 'border-[#12372A] bg-emerald-50/80 ring-2 ring-[#12372A]/20 shadow-xs scale-105'
-                      : 'border-slate-200 bg-white hover:border-slate-300'
+                      ? 'border-[#12372A] bg-emerald-50/80 ring-2 ring-[#12372A]/20 shadow-xs scale-105 font-bold text-[#12372A]'
+                      : 'border-slate-200 bg-white hover:border-slate-300 text-slate-700 hover:bg-slate-50'
                   }`}
                 >
-                  <span
-                    className="w-4 h-4 rounded-full border border-black/10 shrink-0 shadow-2xs"
-                    style={{ backgroundColor: v.colorCode }}
-                  ></span>
-                  <span className="text-xs font-medium text-slate-800">{v.name.split(' (')[0]}</span>
-                  {isSelected && <Check size={12} className="text-emerald-700" />}
+                  {v.image ? (
+                    <span className="relative w-4 h-4 rounded-full overflow-hidden border border-slate-300 shrink-0 shadow-2xs">
+                      <img src={v.image} alt={v.name} className="w-full h-full object-cover" />
+                    </span>
+                  ) : (
+                    <span
+                      className="w-3.5 h-3.5 rounded-full border border-black/15 shrink-0 shadow-2xs"
+                      style={{ backgroundColor: v.colorCode }}
+                    ></span>
+                  )}
+                  <span className="text-xs">{v.name.split(' (')[0]}</span>
+                  {isSelected && <Check size={12} className="text-emerald-700 stroke-[2.5]" />}
                 </button>
               );
             })}

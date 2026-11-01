@@ -496,7 +496,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 <div className="flex justify-between items-start text-xs border-b border-slate-200 pb-3">
                   <div className="flex gap-2.5 items-center">
                     <div className="relative w-12 h-12 rounded-xl overflow-hidden border border-slate-300 shrink-0">
-                      <Image src={(currentProduct?.image) || '/banner.jpeg'} alt="Thumbnail" fill unoptimized className="object-cover" />
+                      <Image src={(selectedVariant?.image || currentProduct?.image) || '/banner.jpeg'} alt="Thumbnail" fill unoptimized className="object-cover" />
                     </div>
                     <div>
                       <h5 className="font-bold text-slate-900 text-xs sm:text-sm line-clamp-1">{currentProduct.title}</h5>
@@ -551,18 +551,24 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                           key={i}
                           type="button"
                           onClick={() => onSelectVariant(v)}
-                          className={`p-1.5 rounded-xl border flex items-center gap-1.5 text-left transition-all ${
+                          className={`p-2 rounded-xl border flex items-center gap-2 text-left transition-all cursor-pointer ${
                             isSelected
-                              ? 'border-[#12372A] bg-emerald-50 ring-2 ring-[#12372A]/20 font-bold shadow-xs'
-                              : 'border-slate-200 bg-white hover:border-slate-300'
+                              ? 'border-[#12372A] bg-emerald-50 ring-2 ring-[#12372A]/20 font-bold shadow-xs text-[#12372A]'
+                              : 'border-slate-200 bg-white hover:border-slate-300 text-slate-700 hover:bg-slate-50'
                           }`}
                         >
-                          <span
-                            className="w-3.5 h-3.5 rounded-full border border-black/10 shrink-0 shadow-2xs"
-                            style={{ backgroundColor: v.colorCode }}
-                          ></span>
-                          <span className="text-xs text-slate-900 truncate flex-1">{v.name ? v.name.split(' (')[0] : 'ডিফল্ট'}</span>
-                          {isSelected && <Check size={12} className="text-emerald-700 shrink-0" />}
+                          {v.image ? (
+                            <span className="relative w-5 h-5 rounded-md overflow-hidden border border-slate-300 shrink-0 shadow-2xs">
+                              <img src={v.image} alt={v.name} className="w-full h-full object-cover" />
+                            </span>
+                          ) : (
+                            <span
+                              className="w-4 h-4 rounded-full border border-black/15 shrink-0 shadow-2xs"
+                              style={{ backgroundColor: v.colorCode }}
+                            ></span>
+                          )}
+                          <span className="text-xs font-semibold truncate flex-1">{v.name ? v.name.split(' (')[0] : 'ডিফল্ট'}</span>
+                          {isSelected && <Check size={13} className="text-emerald-700 shrink-0 stroke-[2.5]" />}
                         </button>
                       );
                     })}

@@ -74,8 +74,10 @@ export const ProductDetailsModal = React.memo(function ProductDetailsModal({
 
   useEffect(() => {
     if (product) {
-      setActiveImg(product.gallery?.[0] || product.image || '/banner.jpeg');
-      setSelectedVariant(product.variants?.[0] || null);
+      const initialVariant = product.variants?.[0] || null;
+      setSelectedVariant(initialVariant);
+      const initialImg = initialVariant?.image || product.gallery?.[0] || product.image || '/banner.jpeg';
+      setActiveImg(initialImg);
       setSelectedSize(product.sizes?.[0] || 'Free Size');
       setQuantity(1);
       setLocalReviews(product.reviews || []);
@@ -107,10 +109,29 @@ export const ProductDetailsModal = React.memo(function ProductDetailsModal({
     onOrderNow(product, selectedVariant, selectedSize, quantity);
   };
 
-  const galleryImages =
-    product.gallery && product.gallery.length > 0
-      ? product.gallery
-      : [product.image || '/banner.jpeg'];
+  const galleryImages = React.useMemo(() => {
+    if (!product) return ['/banner.jpeg'];
+    const imgs: string[] = [];
+    if (product.gallery && product.gallery.length > 0) {
+      imgs.push(...product.gallery);
+    } else if (product.image) {
+      imgs.push(product.image);
+    }
+    // Add variant images if they are not already in gallery
+    if (product.variants) {
+      product.variants.forEach((v) => {
+        if (v.image && !imgs.includes(v.image)) {
+          imgs.push(v.image);
+        }
+        if (v.images && Array.isArray(v.images)) {
+          v.images.forEach((img) => {
+            if (img && !imgs.includes(img)) imgs.push(img);
+          });
+        }
+      });
+    }
+    return imgs.filter(Boolean).length > 0 ? Array.from(new Set(imgs)) : ['/banner.jpeg'];
+  }, [product]);
 
   // Submit Review Handler
   const handleSubmitReview = async (e: React.FormEvent) => {
@@ -288,12 +309,18 @@ export const ProductDetailsModal = React.memo(function ProductDetailsModal({
                     <Star
                       key={i}
                       size={14}
-                      className={i < Math.round(product.rating || 5) ? 'fill-amber-400' : 'text-slate-300'}
+                      className={
+                        product.rating > 0 && i < Math.round(product.rating)
+                          ? 'fill-amber-400'
+                          : 'text-slate-300'
+                      }
                     />
                   ))}
                 </div>
                 <span className="text-xs font-bold text-slate-700 underline decoration-slate-300">
-                  {product.rating} ({displayReviewsCount}টি কাস্টমার রিভিউ)
+                  {displayReviewsCount > 0
+                    ? `${product.rating} (${displayReviewsCount}টি কাস্টমার রিভিউ)`
+                    : '০টি রিভিউ (প্রথম রিভিউ দিন)'}
                 </span>
                 <span className="badge badge-xs badge-success text-white font-bold">রিভিউ দিন</span>
               </div>
@@ -312,30 +339,40 @@ export const ProductDetailsModal = React.memo(function ProductDetailsModal({
 
             {/* Color Variant Selection */}
             <div>
-              <label className="text-xs font-bold text-slate-800 block mb-1.5">
-                কালার নির্বাচন করুন:{' '}
-                <span className="text-emerald-700 font-extrabold">{selectedVariant?.name || 'ডিফল্ট'}</span>
+              <label className="text-xs font-bold text-slate-800 block mb-1.5 flex items-center justify-between">
+                <span>
+                  কালার নির্বাচন করুন:{' '}
+                  <span className="text-emerald-800 font-extrabold">{selectedVariant?.name || 'ডিফল্ট'}</span>
+                </span>
+                <span className="text-[10px] text-slate-400">ছবি দেখতে কালারে ক্লিক করুন</span>
               </label>
               <div className="flex flex-wrap gap-2">
                 {product.variants.map((v, i) => {
                   const isSelected = selectedVariant?.name === v.name;
+                  const cleanName = v.name ? v.name.split(' (')[0] : 'ডিফল্ট';
                   return (
                     <button
                       key={i}
                       type="button"
                       onClick={() => handleSelectVariant(v)}
-                      className={`px-3 py-1.5 rounded-xl border flex items-center gap-2 transition-all ${
+                      className={`px-3 py-1.5 rounded-xl border flex items-center gap-2 transition-all cursor-pointer ${
                         isSelected
-                          ? 'border-[#12372A] bg-emerald-50 ring-2 ring-[#12372A]/20 font-bold shadow-xs'
-                          : 'border-slate-200 bg-white hover:border-slate-300'
+                          ? 'border-[#12372A] bg-emerald-50 ring-2 ring-[#12372A]/20 font-bold shadow-xs text-[#12372A]'
+                          : 'border-slate-200 bg-white hover:border-slate-300 text-slate-700 hover:bg-slate-50'
                       }`}
                     >
-                      <span
-                        className="w-3.5 h-3.5 rounded-full border border-black/10 shrink-0 shadow-2xs"
-                        style={{ backgroundColor: v.colorCode }}
-                      ></span>
-                      <span className="text-xs text-slate-900">{v.name ? v.name.split(' (')[0] : 'ডিফল্ট'}</span>
-                      {isSelected && <Check size={12} className="text-emerald-700" />}
+                      {v.image ? (
+                        <div className="relative w-5 h-5 rounded-md overflow-hidden border border-slate-300 shrink-0 shadow-2xs">
+                          <img src={v.image} alt={v.name} className="w-full h-full object-cover" />
+                        </div>
+                      ) : (
+                        <span
+                          className="w-4 h-4 rounded-full border border-black/15 shrink-0 shadow-2xs"
+                          style={{ backgroundColor: v.colorCode }}
+                        ></span>
+                      )}
+                      <span className="text-xs font-bold">{cleanName}</span>
+                      {isSelected && <Check size={13} className="text-emerald-700 stroke-[2.5]" />}
                     </button>
                   );
                 })}
@@ -525,19 +562,25 @@ export const ProductDetailsModal = React.memo(function ProductDetailsModal({
                 <div className="flex items-center gap-4">
                   <div className="text-center sm:text-left">
                     <div className="text-3xl sm:text-4xl font-black text-amber-400">
-                      {product.rating}
+                      {product.rating > 0 ? product.rating : '০.০'}
                     </div>
                     <div className="flex text-amber-400 justify-center sm:justify-start mt-0.5">
                       {[...Array(5)].map((_, i) => (
                         <Star
                           key={i}
                           size={15}
-                          className={i < Math.round(product.rating || 5) ? 'fill-amber-400' : 'text-emerald-700'}
+                          className={
+                            product.rating > 0 && i < Math.round(product.rating)
+                              ? 'fill-amber-400'
+                              : 'text-emerald-700/60'
+                          }
                         />
                       ))}
                     </div>
                     <span className="text-[11px] text-emerald-200 mt-1 block">
-                      সর্বমোট {displayReviewsCount}টি ভেরিফাইড রিভিউ
+                      {displayReviewsCount > 0
+                        ? `সর্বমোট ${displayReviewsCount}টি ভেরিফাইড রিভিউ`
+                        : 'এখনো কোনো রিভিউ দেওয়া হয়নি (প্রথম রিভিউ দিন)'}
                     </span>
                   </div>
                 </div>

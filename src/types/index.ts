@@ -15,6 +15,7 @@ export interface ProductVariant {
   colorCode: string;
   stock: number;
   image?: string;
+  images?: string[];
   extraPrice?: number;
 }
 

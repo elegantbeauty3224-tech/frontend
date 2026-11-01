@@ -31,10 +31,10 @@ export const fallbackProducts: ProductItem[] = [
     sizes: ['Free Size (আনস্টিচড)', 'M (38)', 'L (40)', 'XL (42)', 'XXL (44)'],
     badge: 'হট ডিল',
     variants: [
-      { name: 'রয়েল ব্লু (Royal Blue)', colorCode: '#1E3A8A', stock: 15 },
-      { name: 'মেরুন রেড (Maroon Red)', colorCode: '#831843', stock: 12 },
-      { name: 'এমারেল্ড গ্রিন (Emerald Green)', colorCode: '#065F46', stock: 10 },
-      { name: 'পার্পল ভায়োলেট (Purple Violet)', colorCode: '#581C87', stock: 8 },
+      { name: 'রয়েল ব্লু (Royal Blue)', colorCode: '#1E3A8A', stock: 15, image: '/product-clothing.jpg' },
+      { name: 'মেরুন রেড (Maroon Red)', colorCode: '#831843', stock: 12, image: '/banner.jpeg' },
+      { name: 'এমারেল্ড গ্রিন (Emerald Green)', colorCode: '#065F46', stock: 10, image: '/product-clothing.jpg' },
+      { name: 'পার্পল ভায়োলেট (Purple Violet)', colorCode: '#581C87', stock: 8, image: '/banner.jpeg' },
     ],
   },
   {

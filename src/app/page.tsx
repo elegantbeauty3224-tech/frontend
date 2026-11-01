@@ -142,7 +142,7 @@ export default function LandingPage() {
               cartItemId,
               productId: prod.id,
               productTitle: prod.title,
-              image: prod.image,
+              image: chosenVariant.image || prod.image || '/banner.jpeg',
               variantName: chosenVariant.name,
               colorCode: chosenVariant.colorCode,
               size: chosenSize,
@@ -323,41 +323,57 @@ export default function LandingPage() {
       .then((res) => res.json())
       .then((json) => {
         if (json.success && Array.isArray(json.data) && json.data.length > 0) {
-          const mapped: ProductItem[] = json.data.map((p: any) => ({
-            id: p._id || p.id,
-            title: p.title,
-            englishTitle: p.englishTitle || '',
-            category: p.category || 'Clothing',
-            regularPrice: p.regularPrice || 0,
-            salePrice: p.salePrice || 0,
-            discountPercent:
-              p.discountPercent ||
-              (p.regularPrice ? Math.round(((p.regularPrice - p.salePrice) / p.regularPrice) * 100) : 0),
-            rating: p.rating || 4.9,
-            reviewsCount: p.reviewCount || p.reviewsCount || 120,
-            image: p.images?.[0] || '/banner.jpeg',
-            gallery: p.images && p.images.length > 0 ? p.images : ['/banner.jpeg'],
-            description: p.description || '',
-            features: p.features || [],
-            specs:
-              p.specifications && p.specifications.length > 0
-                ? p.specifications.map((s: any) => ({ key: s.key, value: s.value }))
-                : [
-                    { key: 'ক্যাটাগরি', value: p.category || 'জনপ্রিয় পণ্য' },
-                    { key: 'ডেলিভারি', value: 'সারা দেশে ক্যাশ অন ডেলিভারি' },
-                  ],
-            sizes: p.sizes && p.sizes.length > 0 ? p.sizes : ['Free Size'],
-            badge: p.badges?.[0] || (p.isFeatured ? 'হট ডিল' : 'নতুন কালেকশন'),
-            variants:
-              p.variants && p.variants.length > 0
-                ? p.variants.map((v: any) => ({
-                    name: v.name,
-                    colorCode: v.colorCode || '#12372A',
-                    stock: v.stock || 20,
-                  }))
-                : [{ name: 'ডিফল্ট', colorCode: '#12372A', stock: 20 }],
-            reviews: Array.isArray(p.reviews) ? p.reviews : [],
-          }));
+          const mapped: ProductItem[] = json.data.map((p: any) => {
+            const variantImages = (p.variants || []).map((v: any) => v.image).filter(Boolean);
+            const allProductImages = Array.from(new Set([...(p.images || []), ...variantImages])).filter(Boolean);
+            const coverImage = p.images?.[0] || allProductImages[0] || '/banner.jpeg';
+
+            return {
+              id: p._id || p.id,
+              title: p.title,
+              englishTitle: p.englishTitle || '',
+              category: p.category || 'Clothing',
+              regularPrice: p.regularPrice || 0,
+              salePrice: p.salePrice || 0,
+              discountPercent:
+                p.discountPercent ||
+                (p.regularPrice ? Math.round(((p.regularPrice - p.salePrice) / p.regularPrice) * 100) : 0),
+              rating: typeof p.rating === 'number' ? p.rating : 0,
+              reviewsCount:
+                typeof p.reviewCount === 'number'
+                  ? p.reviewCount
+                  : typeof p.reviewsCount === 'number'
+                  ? p.reviewsCount
+                  : Array.isArray(p.reviews)
+                  ? p.reviews.length
+                  : 0,
+              image: coverImage,
+              gallery: allProductImages.length > 0 ? allProductImages : ['/banner.jpeg'],
+              description: p.description || '',
+              features: p.features || [],
+              specs:
+                p.specifications && p.specifications.length > 0
+                  ? p.specifications.map((s: any) => ({ key: s.key, value: s.value }))
+                  : [
+                      { key: 'ক্যাটাগরি', value: p.category || 'জনপ্রিয় পণ্য' },
+                      { key: 'ডেলিভারি', value: 'সারা দেশে ক্যাশ অন ডেলিভারি' },
+                    ],
+              sizes: p.sizes && p.sizes.length > 0 ? p.sizes : ['Free Size'],
+              badge: p.badges?.[0] || (p.isFeatured ? 'হট ডিল' : 'নতুন কালেকশন'),
+              variants:
+                p.variants && p.variants.length > 0
+                  ? p.variants.map((v: any) => ({
+                      name: v.name,
+                      colorCode: v.colorCode || '#12372A',
+                      stock: v.stock !== undefined ? v.stock : 20,
+                      image: v.image || (v.images && v.images[0]) || '',
+                      images: v.images && v.images.length > 0 ? v.images : (v.image ? [v.image] : []),
+                      extraPrice: v.extraPrice || 0,
+                    }))
+                  : [{ name: 'ডিফল্ট', colorCode: '#12372A', stock: 20, image: '' }],
+              reviews: Array.isArray(p.reviews) ? p.reviews : [],
+            };
+          });
           setProductsList(mapped);
 
           setCurrentProduct((prev) => {
@@ -693,11 +709,15 @@ export default function LandingPage() {
                   "name": "Elegant Beauty"
                 }
               },
-              "aggregateRating": {
-                "@type": "AggregateRating",
-                "ratingValue": currentProduct.rating || 4.9,
-                "reviewCount": currentProduct.reviewsCount || 168
-              }
+              ...(currentProduct.reviewsCount > 0
+                ? {
+                    aggregateRating: {
+                      "@type": "AggregateRating",
+                      ratingValue: currentProduct.rating,
+                      reviewCount: currentProduct.reviewsCount,
+                    },
+                  }
+                : {})
             })
           }}
         />

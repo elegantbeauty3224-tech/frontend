@@ -41,12 +41,12 @@ export const HeroIntro: React.FC<HeroIntroProps> = ({
 
       {/* Quick Color Picker in Hero */}
       {currentProduct && selectedVariant && (
-        <div className="pt-2 flex flex-col items-center gap-2 min-h-[76px] justify-center">
+        <div className="pt-2 flex flex-col items-center gap-2 min-h-[82px] justify-center">
           <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
             <span>পছন্দের কালার বাছাই করুন:</span>
             <span className="text-emerald-800 font-extrabold">{selectedVariant.name}</span>
           </span>
-          <div className="flex flex-wrap items-center justify-center gap-2 min-h-[38px]">
+          <div className="flex flex-wrap items-center justify-center gap-2 min-h-[40px]">
             {(currentProduct.variants || []).map((v, i) => {
               const isSelected = selectedVariant.name === v.name;
               return (

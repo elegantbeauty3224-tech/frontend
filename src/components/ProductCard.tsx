@@ -65,10 +65,10 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
 
       <div className="p-4 space-y-2.5 flex-1 flex flex-col justify-between">
         <div>
-          <div className="flex items-center gap-1 text-[11px] text-amber-500 mb-1">
-            <Star size={12} className="fill-amber-400" />
-            <span className="font-bold">{product.rating}</span>
-            <span className="text-slate-400">({product.reviewsCount})</span>
+          <div className="flex items-center gap-1.5 text-[11px] mb-1">
+            <Star size={12} className="fill-amber-400 text-amber-500" />
+            <span className="font-extrabold text-amber-900">{product.rating}</span>
+            <span className="text-slate-600 font-medium">({product.reviewsCount})</span>
           </div>
 
           <h3
@@ -123,7 +123,7 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
         <div className="pt-2 border-t border-slate-100 space-y-2">
           <div className="flex items-baseline justify-between">
             <div>
-              <div className="text-xs text-slate-400 line-through">৳{product.regularPrice}</div>
+              <div className="text-xs text-slate-600 line-through font-medium">৳{product.regularPrice}</div>
               <div className="text-base font-black text-emerald-800">৳{product.salePrice}</div>
             </div>
             <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-full">
@@ -138,6 +138,7 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
               onClick={() => onAddToCart(product, selectedCardVariant, defaultSize)}
               className="btn btn-xs bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold rounded-lg border-0 shadow-xs gap-1"
               title="কার্টে যোগ করুন"
+              aria-label={`কার্টে যোগ করুন - ${product.title}`}
             >
               <ShoppingCart size={12} /> কার্ট
             </button>
@@ -145,6 +146,7 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
               type="button"
               onClick={() => onOrderNow(product, selectedCardVariant, defaultSize)}
               className="btn btn-xs bg-[#12372A] hover:bg-[#1a4a39] text-white font-bold rounded-lg border-0 shadow-xs"
+              aria-label={`এখনই অর্ডার করুন - ${product.title}`}
             >
               অর্ডার করুন
             </button>
@@ -156,6 +158,7 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
               type="button"
               onClick={() => onOpenDetails(product, selectedCardVariant)}
               className="col-span-3 btn btn-xs btn-outline border-slate-300 text-slate-700 hover:bg-slate-100 font-semibold rounded-lg gap-1"
+              aria-label={`বিস্তারিত দেখুন - ${product.title}`}
             >
               <Eye size={12} /> বিস্তারিত দেখুন
             </button>

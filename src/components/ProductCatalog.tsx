@@ -55,14 +55,14 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
           <h2 className="text-2xl sm:text-3xl font-black text-[#12372A] mt-1">
             এক্সক্লুসিভ কালেকশনসমূহ (All Products)
           </h2>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-slate-600 mt-1 font-medium">
             পণ্যের বিস্তারিত দেখতে "বিস্তারিত দেখুন" ক্লিক করুন অথবা সরাসরি অর্ডার করুন
           </p>
         </div>
 
         {/* Search bar */}
         <div className="relative w-full md:w-72">
-          <Search size={16} className="absolute left-3 top-3 text-slate-400" />
+          <Search size={16} className="absolute left-3 top-3 text-slate-500" />
           <input
             type="text"
             placeholder="পণ্য খুঁজুন..."
@@ -128,6 +128,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
           <div className="flex flex-wrap items-center justify-center gap-1.5">
             <button
               type="button"
+              aria-label="আগের পাতা"
               onClick={() => onPageChange((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
               className="btn btn-xs sm:btn-sm btn-outline border-slate-300 text-xs gap-1 disabled:opacity-40"
@@ -141,6 +142,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
               <button
                 key={i}
                 type="button"
+                aria-label={`পৃষ্ঠা ${i + 1}`}
                 onClick={() => onPageChange(i + 1)}
                 className={`btn btn-xs sm:btn-sm text-xs font-bold ${
                   currentPage === i + 1 ? 'btn-neutral bg-[#12372A] text-white' : 'btn-ghost'
@@ -152,6 +154,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
 
             <button
               type="button"
+              aria-label="পরবর্তী পাতা"
               onClick={() => onPageChange((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
               className="btn btn-xs sm:btn-sm btn-outline border-slate-300 text-xs gap-1 disabled:opacity-40"

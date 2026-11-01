@@ -23,14 +23,14 @@ export const Footer = React.memo(function Footer() {
             ইমেইল: <a href="mailto:elegantbeauty3224@gmail.com" className="hover:underline font-medium">elegantbeauty3224@gmail.com</a>
           </div>
 
-          <div className="text-slate-500 font-medium">
+          <div className="text-slate-600 font-medium">
             © 2026 Elegant Beauty. All rights reserved.
           </div>
         </div>
 
         {/* Developer Credit & Branding */}
         <div className="pt-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
-          <p className="text-[11px] text-slate-500 font-medium">
+          <p className="text-[11px] text-slate-600 font-medium">
             বাংলাদেশের বিশ্বস্ত এবং প্রিমিয়াম কোয়ালিটি ই-কমার্স শপ
           </p>
 

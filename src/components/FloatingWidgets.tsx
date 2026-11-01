@@ -45,14 +45,9 @@ export const FloatingWidgets = React.memo(function FloatingWidgets({
             </span>
           )}
         </div>
-        <div className="hidden sm:flex flex-col text-left">
-          <span className="text-[10px] text-emerald-200 font-semibold uppercase tracking-wider">
-            শপিং ব্যাগ
-          </span>
-          <span className="font-mono font-black text-xs text-amber-300">
-            ৳{hasCartItems ? cartSubtotal : subtotal}
-          </span>
-        </div>
+        <span className="hidden sm:inline text-xs font-bold text-emerald-100 tracking-wide">
+          শপিং ব্যাগ
+        </span>
       </button>
 
       {/* MOBILE PERSISTENT BOTTOM BAR */}

@@ -65,7 +65,12 @@ export const FaqSection: React.FC = React.memo(() => {
             key={index}
             className="collapse collapse-arrow bg-white border border-slate-200 rounded-2xl shadow-2xs hover:border-emerald-300 transition-all"
           >
-            <input type="radio" name="faq-accordion" defaultChecked={index === 0} />
+            <input
+              type="radio"
+              name="faq-accordion"
+              aria-label={faq.question}
+              defaultChecked={index === 0}
+            />
             <div className="collapse-title text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2.5 pr-10 py-4">
               {faq.icon}
               <span className="leading-snug">{faq.question}</span>
@@ -80,7 +85,7 @@ export const FaqSection: React.FC = React.memo(() => {
       {/* Trust & Support Footer Strip */}
       <div className="max-w-3xl mx-auto mt-6 p-4 rounded-2xl bg-gradient-to-r from-emerald-900 to-[#12372A] text-white flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
         <div>
-          <h4 className="font-extrabold text-sm text-amber-300">আরো কিছু জানার আছে?</h4>
+          <h3 className="font-extrabold text-sm text-amber-300">আরো কিছু জানার আছে?</h3>
           <p className="text-xs text-emerald-100 mt-0.5">
             আমাদের কাস্টমার কেয়ার টিম আপনাকে সহযোগিতা করার জন্য সার্বক্ষণিক প্রস্তুত।
           </p>

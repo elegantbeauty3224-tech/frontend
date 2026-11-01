@@ -303,7 +303,7 @@ export const ProductDetailsModal = React.memo(function ProductDetailsModal({
             <div className="flex items-baseline gap-3 p-3 bg-emerald-50/60 rounded-xl border border-emerald-100">
               <span className="text-2xl font-black text-[#12372A]">৳{product.salePrice}</span>
               {product.regularPrice > product.salePrice && (
-                <span className="text-sm text-slate-400 line-through">৳{product.regularPrice}</span>
+                <span className="text-sm text-slate-600 line-through font-medium">৳{product.regularPrice}</span>
               )}
               <span className="text-xs font-bold text-emerald-700 bg-white px-2 py-0.5 rounded-md border border-emerald-200">
                 সাশ্রয় ৳{product.regularPrice - product.salePrice}
@@ -482,7 +482,7 @@ export const ProductDetailsModal = React.memo(function ProductDetailsModal({
                         key={i}
                         className="p-3 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:border-emerald-300 transition-colors"
                       >
-                        <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">
+                        <span className="text-[10px] uppercase font-bold text-slate-600 tracking-wider block">
                           {sp.key}
                         </span>
                         <span className="font-bold text-xs text-slate-900 mt-1 block">
@@ -698,7 +698,7 @@ export const ProductDetailsModal = React.memo(function ProductDetailsModal({
                                   </span>
                                 )}
                               </div>
-                              <span className="text-[10px] text-slate-400">
+                              <span className="text-[10px] text-slate-600 font-medium">
                                 {rev.createdAt
                                   ? new Date(rev.createdAt).toLocaleDateString('bn-BD', {
                                       day: 'numeric',

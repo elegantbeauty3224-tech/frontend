@@ -3,4 +3,3 @@ Allow: /
 Disallow: /api/
 
 Sitemap: https://www.elegant-beauty.xyz/sitemap.xml
-Host: https://www.elegant-beauty.xyz

@@ -33,16 +33,16 @@ import {
 
 // Types & Data
 import { CartItem, ProductItem, ProductVariant, AnnouncementConfig, DeliveryLocationConfig, CategoryConfig, ProductReview } from '@/types';
-import { fallbackProducts, productCategories } from '@/data/fallbackProducts';
+import { productCategories } from '@/data/fallbackProducts';
 
 export function LandingPageContent() {
-  // Live products catalog from database (initializes with fallbackProducts)
-  const [productsList, setProductsList] = useState<ProductItem[]>(fallbackProducts);
+  // Live products catalog from database (initializes empty)
+  const [productsList, setProductsList] = useState<ProductItem[]>([]);
 
   // Active selected product for hero / direct order
-  const [currentProduct, setCurrentProduct] = useState<ProductItem | null>(fallbackProducts[0] || null);
-  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(fallbackProducts[0]?.variants?.[0] || null);
-  const [selectedSize, setSelectedSize] = useState<string>(fallbackProducts[0]?.sizes?.[0] || 'Free Size');
+  const [currentProduct, setCurrentProduct] = useState<ProductItem | null>(null);
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
+  const [selectedSize, setSelectedSize] = useState<string>('');
   const [singleProductQty, setSingleProductQty] = useState<number>(1);
 
   // Per-card selected variant state for Product Catalog
@@ -430,19 +430,12 @@ export function LandingPageContent() {
     const productParam = params.get('product') || params.get('productId') || pathMatch;
     if (productParam) {
       const cleanParam = decodeURIComponent(productParam).trim().toLowerCase();
-      const matched =
-        productsList.find(
-          (p) =>
-            p.id.toLowerCase() === cleanParam ||
-            p.title.toLowerCase() === cleanParam ||
-            (p.englishTitle && p.englishTitle.toLowerCase().includes(cleanParam))
-        ) ||
-        fallbackProducts.find(
-          (p) =>
-            p.id.toLowerCase() === cleanParam ||
-            p.title.toLowerCase() === cleanParam ||
-            (p.englishTitle && p.englishTitle.toLowerCase().includes(cleanParam))
-        );
+      const matched = productsList.find(
+        (p) =>
+          p.id.toLowerCase() === cleanParam ||
+          p.title.toLowerCase() === cleanParam ||
+          (p.englishTitle && p.englishTitle.toLowerCase().includes(cleanParam))
+      );
       if (matched) {
         setInspectingProduct(matched);
       }

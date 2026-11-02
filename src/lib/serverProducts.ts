@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import { fallbackProducts } from '@/data/fallbackProducts';
 
 const SITE_URL = 'https://www.elegant-beauty.xyz';
 const BACKEND_URL = process.env.BACKEND_API_URL || 'https://backend-nine-kohl-67.vercel.app/api';
@@ -68,28 +67,6 @@ export async function fetchServerProduct(identifier: string): Promise<FetchedPro
     }
   } catch {
     // If backend fetch times out or fails
-  }
-
-  // 2. Fallback only if database is offline or product matches
-  const localMatch = fallbackProducts.find(
-    (p) =>
-      p.id.toLowerCase() === cleanId.toLowerCase() ||
-      p.title.toLowerCase() === cleanId.toLowerCase() ||
-      (p.englishTitle && p.englishTitle.toLowerCase().includes(cleanId.toLowerCase()))
-  );
-
-  if (localMatch) {
-    return {
-      id: localMatch.id,
-      title: localMatch.title,
-      englishTitle: localMatch.englishTitle,
-      category: localMatch.category,
-      salePrice: localMatch.salePrice,
-      regularPrice: localMatch.regularPrice,
-      discountPercent: localMatch.discountPercent,
-      description: localMatch.description,
-      image: toAbsoluteImageUrl(localMatch.image),
-    };
   }
 
   return null;

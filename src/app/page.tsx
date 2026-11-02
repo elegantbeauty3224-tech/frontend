@@ -24,6 +24,12 @@ import { FloatingWidgets } from '@/components/FloatingWidgets';
 import { SuccessReceiptModal } from '@/components/SuccessReceiptModal';
 import { UserProfileModal } from '@/components/UserProfileModal';
 import { useAuth } from '@/context/AuthContext';
+import {
+  trackViewContent,
+  trackAddToCart,
+  trackInitiateCheckout,
+  trackPurchase,
+} from '@/lib/fpixel';
 
 // Types & Data
 import { CartItem, ProductItem, ProductVariant, AnnouncementConfig, DeliveryLocationConfig, CategoryConfig, ProductReview } from '@/types';
@@ -127,6 +133,9 @@ export default function LandingPage() {
       };
       const chosenSize = size || prod.sizes?.[0] || 'Free Size';
       const cartItemId = `${prod.id}-${chosenVariant.name || 'Default'}-${chosenSize}`;
+
+      // Meta Pixel: Track AddToCart event
+      trackAddToCart(prod, qty, chosenVariant.name);
 
       setCart((prevCart) => {
         const existingIndex = prevCart.findIndex((it) => it.cartItemId === cartItemId);
@@ -423,6 +432,13 @@ export default function LandingPage() {
     }
   }, [productsList]);
 
+  // Meta Pixel: Track ViewContent when a customer visits / inspects a product
+  useEffect(() => {
+    if (inspectingProduct) {
+      trackViewContent(inspectingProduct);
+    }
+  }, [inspectingProduct?.id]);
+
   // Checkout mode: 'cart' | 'single_product'
   const [checkoutMode, setCheckoutMode] = useState<'cart' | 'single_product'>('single_product');
 
@@ -453,19 +469,50 @@ export default function LandingPage() {
     }
   }, []);
 
-  const openCheckout = useCallback((mode: 'cart' | 'single_product' = 'single_product') => {
-    setIsCartOpen(false);
-    setInspectingProduct(null);
-    if (typeof window !== 'undefined') {
-      window.history.replaceState(null, '', window.location.pathname);
-    }
-    setCheckoutMode(mode);
-    setIsCheckoutModalOpen(true);
-  }, []);
+  const openCheckout = useCallback(
+    (mode: 'cart' | 'single_product' = 'single_product') => {
+      setIsCartOpen(false);
+      setInspectingProduct(null);
+      if (typeof window !== 'undefined') {
+        window.history.replaceState(null, '', window.location.pathname);
+      }
+      setCheckoutMode(mode);
+      setIsCheckoutModalOpen(true);
+
+      // Meta Pixel: Track InitiateCheckout & ClickOrder event
+      if (mode === 'cart' && cart.length > 0) {
+        trackInitiateCheckout(
+          cart.map((it) => ({
+            id: it.productId,
+            title: it.productTitle,
+            price: it.unitPrice,
+            quantity: it.quantity,
+            variantName: it.variantName,
+          })),
+          cartSubtotal
+        );
+      } else if (currentProduct) {
+        trackInitiateCheckout(
+          [
+            {
+              id: currentProduct.id,
+              title: currentProduct.title,
+              price: currentProduct.salePrice,
+              quantity: singleProductQty,
+              variantName: selectedVariant?.name,
+            },
+          ],
+          currentProduct.salePrice * singleProductQty
+        );
+      }
+    },
+    [cart, cartSubtotal, currentProduct, selectedVariant?.name, singleProductQty]
+  );
 
   const openProductDetails = useCallback(
     (prod: ProductItem, preselectedVariant?: ProductVariant) => {
       setInspectingProduct(prod);
+      trackViewContent(prod);
       if (typeof window !== 'undefined') {
         window.history.replaceState(null, '', `/?product=${prod.id}`);
       }
@@ -528,12 +575,27 @@ export default function LandingPage() {
           stock: prod.stockQuantity || 10,
         };
       const chosenSize = size || prod.sizes?.[0] || 'Free Size';
+      const orderQty = qty > 0 ? qty : 1;
 
       setCurrentProduct(prod);
       setSelectedVariant(chosenVariant);
       setSelectedSize(chosenSize);
-      setSingleProductQty(qty > 0 ? qty : 1);
+      setSingleProductQty(orderQty);
       setCheckoutMode('single_product');
+
+      // Meta Pixel: Track InitiateCheckout & ClickOrder event
+      trackInitiateCheckout(
+        [
+          {
+            id: prod.id,
+            title: prod.title,
+            price: prod.salePrice,
+            quantity: orderQty,
+            variantName: chosenVariant.name,
+          },
+        ],
+        prod.salePrice * orderQty
+      );
 
       // Do NOT add to cart! User requirement:
       // "when user opens order modal, product will not add to add to cart okay"
@@ -666,6 +728,18 @@ export default function LandingPage() {
           clearCart();
         }
         confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
+
+        // Meta Pixel: Track Purchase event
+        trackPurchase(
+          data.data.orderNumber || 'EB-ORDER',
+          orderItems.map((it) => ({
+            id: String(it.product),
+            title: it.productTitle,
+            price: it.unitPrice,
+            quantity: it.quantity,
+          })),
+          totalAmount
+        );
       } else {
         setErrorMsg(data.message || 'অর্ডারে সমস্যা হয়েছে, পুনরায় চেষ্টা করুন।');
       }

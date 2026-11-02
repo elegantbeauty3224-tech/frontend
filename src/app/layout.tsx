@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "../context/AuthContext";
+import { MetaPixel } from "@/components/MetaPixel";
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.elegant-beauty.xyz'),
@@ -323,6 +324,7 @@ export default function RootLayout({
         className="min-h-screen bg-slate-50 text-slate-800 antialiased selection:bg-amber-100 selection:text-amber-900"
         suppressHydrationWarning
       >
+        <MetaPixel />
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

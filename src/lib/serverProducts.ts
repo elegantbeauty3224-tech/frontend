@@ -153,3 +153,4 @@ export async function getProductMetadata(identifier: string): Promise<Metadata> 
     },
   };
 }
+

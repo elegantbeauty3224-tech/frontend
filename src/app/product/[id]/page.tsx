@@ -14,3 +14,4 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 export default function ProductPage() {
   return <LandingPageContent />;
 }
+

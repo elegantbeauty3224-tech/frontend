@@ -40,9 +40,9 @@ export function LandingPageContent() {
   const [productsList, setProductsList] = useState<ProductItem[]>(fallbackProducts);
 
   // Active selected product for hero / direct order
-  const [currentProduct, setCurrentProduct] = useState<ProductItem>(fallbackProducts[0]);
-  const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(fallbackProducts[0].variants[0]);
-  const [selectedSize, setSelectedSize] = useState<string>(fallbackProducts[0].sizes[0] || 'Free Size');
+  const [currentProduct, setCurrentProduct] = useState<ProductItem | null>(fallbackProducts[0] || null);
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(fallbackProducts[0]?.variants?.[0] || null);
+  const [selectedSize, setSelectedSize] = useState<string>(fallbackProducts[0]?.sizes?.[0] || 'Free Size');
   const [singleProductQty, setSingleProductQty] = useState<number>(1);
 
   // Per-card selected variant state for Product Catalog
@@ -120,12 +120,16 @@ export function LandingPageContent() {
   // Cart operations
   const addToCart = useCallback(
     (
-      prod: ProductItem,
+      prod: ProductItem | null,
       variant?: ProductVariant | null,
       size?: string,
       qty = 1,
       openDrawer = true
     ) => {
+      if (!prod) {
+        scrollToGrid();
+        return;
+      }
       const chosenVariant = variant || prod.variants?.[0] || {
         name: 'ডিফল্ট',
         colorCode: '#12372A',
@@ -331,8 +335,9 @@ export function LandingPageContent() {
     fetch('/api/products?limit=100', { cache: 'no-store' })
       .then((res) => res.json())
       .then((json) => {
-        if (json.success && Array.isArray(json.data) && json.data.length > 0) {
-          const mapped: ProductItem[] = json.data.map((p: any) => {
+        if (json.success && Array.isArray(json.data)) {
+          if (json.data.length > 0) {
+            const mapped: ProductItem[] = json.data.map((p: any) => {
             const variantImages = (p.variants || []).map((v: any) => v.image).filter(Boolean);
             const allProductImages = Array.from(new Set([...(p.images || []), ...variantImages])).filter(Boolean);
             const coverImage = p.images?.[0] || allProductImages[0] || '/banner.jpeg';
@@ -402,7 +407,14 @@ export function LandingPageContent() {
             if (prev) return prev;
             return mapped[0]?.sizes[0] || 'Free Size';
           });
+        } else {
+          // Database has 0 products: empty out the store catalog automatically
+          setProductsList([]);
+          setCurrentProduct(null);
+          setSelectedVariant(null);
+          setSelectedSize('');
         }
+      }
       })
       .catch((err) => console.warn('Could not fetch live products:', err));
   }, []);
@@ -566,11 +578,15 @@ export function LandingPageContent() {
 
   const selectAndOrderProduct = useCallback(
     (
-      prod: ProductItem,
+      prod: ProductItem | null,
       variant?: ProductVariant | null,
       size?: string,
       qty: number = 1
     ) => {
+      if (!prod) {
+        scrollToGrid();
+        return;
+      }
       const chosenVariant =
         variant ||
         cardSelectedVariants[prod.id] ||
@@ -828,7 +844,7 @@ export function LandingPageContent() {
           currentProduct={currentProduct}
           selectedVariant={selectedVariant}
           selectedSize={selectedSize}
-          onSelectVariant={setSelectedVariant}
+          onSelectVariant={(v) => setSelectedVariant(v)}
           onOrderNow={() => selectAndOrderProduct(currentProduct, selectedVariant, selectedSize)}
           onAddToCart={() => addToCart(currentProduct, selectedVariant, selectedSize, 1, true)}
           onScrollToGrid={scrollToGrid}

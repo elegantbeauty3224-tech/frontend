@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layers, Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Layers, Search, ChevronLeft, ChevronRight, Package } from 'lucide-react';
 import { ProductItem, ProductVariant } from '../types';
 import { ProductCard } from './ProductCard';
 
@@ -93,30 +93,40 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
       </div>
 
       {/* Products Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {paginatedProducts.map((prod) => {
-          const activeCardVariant = cardSelectedVariants[prod.id] || prod.variants?.[0] || {
-            name: 'ডিফল্ট',
-            colorCode: '#12372A',
-            stock: prod.stockQuantity || 10,
-          };
+      {paginatedProducts.length === 0 ? (
+        <div className="py-16 text-center text-slate-400 bg-white rounded-2xl border border-dashed border-slate-200 p-8 shadow-xs">
+          <Package className="w-12 h-12 mx-auto mb-3 text-slate-300 stroke-[1.5]" />
+          <p className="text-base font-bold text-slate-700">বর্তমানে কোনো পণ্য তালিকাভুক্ত নেই</p>
+          <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
+            অ্যাডমিন প্যানেল থেকে নতুন পণ্য যুক্ত করা হলে তা এখানে স্বয়ংক্রিয়ভাবে সরাসরি প্রদর্শিত হবে।
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {paginatedProducts.map((prod) => {
+            const activeCardVariant = cardSelectedVariants[prod.id] || prod.variants?.[0] || {
+              name: 'ডিফল্ট',
+              colorCode: '#12372A',
+              stock: prod.stockQuantity || 10,
+            };
 
-          return (
-            <ProductCard
-              key={prod.id}
-              product={prod}
-              isActive={currentProductId === prod.id}
-              selectedCardVariant={activeCardVariant}
-              onSelectVariant={onSelectCardVariant}
-              onAddToCart={onAddToCart}
-              onOrderNow={onOrderNow}
-              onOpenDetails={onOpenDetails}
-              onCopyLink={onCopyLink}
-              isCopied={copiedId === prod.id}
-            />
-          );
-        })}
-      </div>
+            return (
+              <ProductCard
+                key={prod.id}
+                product={prod}
+                isActive={currentProductId === prod.id}
+                selectedCardVariant={activeCardVariant}
+                onSelectVariant={onSelectCardVariant}
+                onAddToCart={onAddToCart}
+                onOrderNow={onOrderNow}
+                onOpenDetails={onOpenDetails}
+                onCopyLink={onCopyLink}
+                isCopied={copiedId === prod.id}
+              />
+            );
+          })}
+        </div>
+      )}
 
       {/* PAGINATION CONTROLS */}
       {totalPages > 1 && (

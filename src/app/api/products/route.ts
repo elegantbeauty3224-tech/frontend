@@ -7,7 +7,11 @@ export async function GET(request: Request) {
   const category = searchParams.get('category') || '';
   const search = searchParams.get('search') || '';
 
-  const backendUrl = process.env.BACKEND_API_URL || 'http://localhost:5000/api';
+  const backendUrl =
+    process.env.BACKEND_API_URL ||
+    (process.env.NODE_ENV === 'production'
+      ? 'https://backend-nine-kohl-67.vercel.app/api'
+      : 'http://localhost:5000/api');
 
   try {
     // Always fetch fresh real-time products with zero caching to reflect admin additions immediately on refresh

@@ -29,15 +29,7 @@ export async function fetchServerProduct(identifier: string): Promise<FetchedPro
   const cleanId = decodeURIComponent(identifier).trim();
   if (!cleanId) return null;
 
-  // 1. Check local fallback products first
-  const localMatch = fallbackProducts.find(
-    (p) =>
-      p.id.toLowerCase() === cleanId.toLowerCase() ||
-      p.title.toLowerCase() === cleanId.toLowerCase() ||
-      (p.englishTitle && p.englishTitle.toLowerCase().includes(cleanId.toLowerCase()))
-  );
-
-  // 2. Try fetching from backend API
+  // 1. Prioritize live backend API product data
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 3500);
@@ -75,8 +67,16 @@ export async function fetchServerProduct(identifier: string): Promise<FetchedPro
       }
     }
   } catch {
-    // If backend fetch times out or fails, fallback to local match
+    // If backend fetch times out or fails
   }
+
+  // 2. Fallback only if database is offline or product matches
+  const localMatch = fallbackProducts.find(
+    (p) =>
+      p.id.toLowerCase() === cleanId.toLowerCase() ||
+      p.title.toLowerCase() === cleanId.toLowerCase() ||
+      (p.englishTitle && p.englishTitle.toLowerCase().includes(cleanId.toLowerCase()))
+  );
 
   if (localMatch) {
     return {

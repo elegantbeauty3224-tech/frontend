@@ -6,10 +6,10 @@ import { ShoppingCart, ShoppingBag, MessageCircle, Phone, Check } from 'lucide-r
 interface FloatingWidgetsProps {
   cartBump: boolean;
   cartTotalItems: number;
-  hasCartItems: boolean;
-  cartSubtotal: number;
-  subtotal: number;
-  totalAmount: number;
+  hasCartItems?: boolean;
+  cartSubtotal?: number;
+  subtotal?: number;
+  totalAmount?: number;
   copyToast: string | null;
   onOpenCart: () => void;
   onOrderClick: () => void;
@@ -18,10 +18,6 @@ interface FloatingWidgetsProps {
 export const FloatingWidgets = React.memo(function FloatingWidgets({
   cartBump,
   cartTotalItems,
-  hasCartItems,
-  cartSubtotal,
-  subtotal,
-  totalAmount,
   copyToast,
   onOpenCart,
   onOrderClick,
@@ -51,14 +47,15 @@ export const FloatingWidgets = React.memo(function FloatingWidgets({
       </button>
 
       {/* MOBILE PERSISTENT BOTTOM BAR */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 p-2.5 shadow-2xl md:hidden flex items-center justify-between gap-2.5">
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 p-2.5 shadow-2xl md:hidden flex items-center justify-between gap-3">
         <button
           type="button"
           onClick={onOpenCart}
-          className="relative btn btn-sm bg-emerald-50 text-emerald-950 border border-emerald-300 rounded-xl px-3 font-bold"
+          className="relative btn btn-sm bg-emerald-50 hover:bg-emerald-100 text-emerald-950 border border-emerald-300 rounded-xl px-4 font-bold flex items-center gap-1.5"
           aria-label="Open Mobile Cart"
         >
-          <ShoppingCart size={16} className="text-emerald-800" />
+          <ShoppingCart size={18} className="text-emerald-800" />
+          <span className="text-xs font-bold text-emerald-900">কার্ট</span>
           {cartTotalItems > 0 && (
             <span className="badge badge-xs bg-emerald-800 text-white font-mono font-bold">
               {cartTotalItems}
@@ -66,19 +63,12 @@ export const FloatingWidgets = React.memo(function FloatingWidgets({
           )}
         </button>
 
-        <div className="min-w-0 flex-1">
-          <div className="text-[10px] text-slate-600 font-semibold">সর্বমোট (COD):</div>
-          <div className="text-base font-black text-[#12372A] font-mono leading-none truncate">
-            ৳{totalAmount}
-          </div>
-        </div>
-
         <button
           onClick={onOrderClick}
-          className="btn btn-sm bg-[#12372A] hover:bg-[#1a4a39] text-white font-black border-0 px-5 rounded-xl shadow-md gap-1"
+          className="flex-1 btn btn-sm bg-[#12372A] hover:bg-[#1a4a39] text-white font-black border-0 px-5 py-2.5 h-auto rounded-xl shadow-md flex items-center justify-center gap-2 text-sm"
         >
-          <ShoppingBag size={14} className="text-amber-300" />
-          <span>অর্ডার করুন</span>
+          <ShoppingBag size={16} className="text-amber-300" />
+          <span>এখনই অর্ডার করুন</span>
         </button>
       </div>
 

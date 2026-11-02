@@ -61,16 +61,11 @@ export const HeroIntro: React.FC<HeroIntroProps> = ({
                       : 'border-slate-200 bg-white hover:border-slate-300 text-slate-700 hover:bg-slate-50'
                   }`}
                 >
-                  {v.image ? (
-                    <span className="relative w-4 h-4 rounded-full overflow-hidden border border-slate-300 shrink-0 shadow-2xs">
-                      <img src={v.image} alt={v.name} className="w-full h-full object-cover" />
-                    </span>
-                  ) : (
-                    <span
-                      className="w-3.5 h-3.5 rounded-full border border-black/15 shrink-0 shadow-2xs"
-                      style={{ backgroundColor: v.colorCode }}
-                    ></span>
-                  )}
+                  {/* Pure color dot */}
+                  <span
+                    className="w-3.5 h-3.5 rounded-full border border-black/15 shrink-0 shadow-2xs"
+                    style={{ backgroundColor: v.colorCode || '#12372A' }}
+                  ></span>
                   <span className="text-xs">{v.name.split(' (')[0]}</span>
                   {isSelected && <Check size={12} className="text-emerald-700 stroke-[2.5]" />}
                 </button>

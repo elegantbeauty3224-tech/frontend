@@ -557,16 +557,11 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                               : 'border-slate-200 bg-white hover:border-slate-300 text-slate-700 hover:bg-slate-50'
                           }`}
                         >
-                          {v.image ? (
-                            <span className="relative w-5 h-5 rounded-md overflow-hidden border border-slate-300 shrink-0 shadow-2xs">
-                              <img src={v.image} alt={v.name} className="w-full h-full object-cover" />
-                            </span>
-                          ) : (
-                            <span
-                              className="w-4 h-4 rounded-full border border-black/15 shrink-0 shadow-2xs"
-                              style={{ backgroundColor: v.colorCode }}
-                            ></span>
-                          )}
+                          {/* Pure color dot */}
+                          <span
+                            className="w-4 h-4 rounded-full border border-black/15 shrink-0 shadow-2xs"
+                            style={{ backgroundColor: v.colorCode || '#12372A' }}
+                          ></span>
                           <span className="text-xs font-semibold truncate flex-1">{v.name ? v.name.split(' (')[0] : 'ডিফল্ট'}</span>
                           {isSelected && <Check size={13} className="text-emerald-700 shrink-0 stroke-[2.5]" />}
                         </button>

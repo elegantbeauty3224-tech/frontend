@@ -122,17 +122,11 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
                   }`}
                   title={`${v.name} (স্টক: ${v.stock})`}
                 >
-                  {/* Color dot or thumbnail */}
-                  {v.image ? (
-                    <span className="relative w-4 h-4 rounded-full overflow-hidden border border-slate-300 shrink-0 shadow-2xs">
-                      <img src={v.image} alt={v.name} className="w-full h-full object-cover" />
-                    </span>
-                  ) : (
-                    <span
-                      className="w-3.5 h-3.5 rounded-full border border-black/15 shrink-0 shadow-2xs"
-                      style={{ backgroundColor: v.colorCode }}
-                    ></span>
-                  )}
+                  {/* Pure color dot */}
+                  <span
+                    className="w-3.5 h-3.5 rounded-full border border-black/15 shrink-0 shadow-2xs"
+                    style={{ backgroundColor: v.colorCode || '#12372A' }}
+                  ></span>
                   <span>{cleanName}</span>
                   {isSelected && <Check size={11} className="text-emerald-700 stroke-[2.5]" />}
                 </button>

@@ -57,16 +57,16 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span className="hidden sm:inline text-xs">দেখুন</span>
           </button>
 
-          {/* Track Order Shortcut Button (Tablet & Desktop only; Mobile accesses via Profile) */}
+          {/* Track Order Shortcut Button (Desktop only; Hidden completely on mobile & tablet) */}
           <button
             type="button"
             onClick={onOpenProfile}
-            className="hidden sm:inline-flex btn btn-xs sm:btn-sm btn-ghost text-slate-700 hover:text-emerald-800 hover:bg-emerald-50 rounded-xl font-bold gap-1 px-2 sm:px-3 shrink-0"
+            className="hidden md:inline-flex btn btn-xs sm:btn-sm btn-ghost text-slate-700 hover:text-emerald-800 hover:bg-emerald-50 rounded-xl font-bold gap-1 px-2 sm:px-3 shrink-0"
             title="আপনার অর্ডার ট্র্যাক করুন"
             aria-label="আপনার অর্ডার ট্র্যাক করুন"
           >
             <Package size={14} className="text-emerald-700" />
-            <span className="hidden md:inline">অর্ডার ট্র্যাক</span>
+            <span>অর্ডার ট্র্যাক</span>
           </button>
 
           {/* User Profile / Google Sign-In Button */}

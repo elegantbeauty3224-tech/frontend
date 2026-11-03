@@ -65,9 +65,9 @@ export const FloatingWidgets = React.memo(function FloatingWidgets({
 
         <button
           onClick={onOrderClick}
-          className="flex-1 btn btn-sm bg-[#12372A] hover:bg-[#1a4a39] text-white font-black border-0 px-5 py-2.5 h-auto rounded-xl shadow-md flex items-center justify-center gap-2 text-sm"
+          className="flex-1 btn btn-md bg-[#12372A] hover:bg-[#1a4a39] text-white font-black border-0 px-5 py-3 h-auto rounded-2xl shadow-xl flex items-center justify-center gap-2 text-sm sm:text-base animate-pulse-glow"
         >
-          <ShoppingBag size={16} className="text-amber-300" />
+          <ShoppingBag size={18} className="text-amber-300 shrink-0" />
           <span>এখনই অর্ডার করুন</span>
         </button>
       </div>

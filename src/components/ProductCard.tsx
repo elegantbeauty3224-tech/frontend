@@ -1,7 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
-import { Star, Eye, ShoppingCart, Check, Copy } from 'lucide-react';
+import { Star, Eye, ShoppingCart, ShoppingBag, Check, Copy } from 'lucide-react';
 import { ProductItem, ProductVariant } from '../types';
+import { formatColorLabel, formatShortColorName, isVariantSelected, getColorDotStyles } from '../lib/colorUtils';
 
 interface ProductCardProps {
   product: ProductItem;
@@ -27,9 +28,7 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
   isCopied,
 }) => {
   const defaultSize = product.sizes?.[0] || 'Free Size';
-  const variantDisplayName = selectedCardVariant?.name
-    ? selectedCardVariant.name.split(' (')[0]
-    : 'ডিফল্ট';
+  const variantDisplayName = formatColorLabel(selectedCardVariant?.name, selectedCardVariant?.colorCode);
 
   return (
     <div
@@ -104,31 +103,35 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
 
           <div className="flex items-center gap-1.5 flex-wrap">
             {(product.variants || []).map((v, i) => {
-              const isSelected = selectedCardVariant?.name === v.name;
-              const cleanName = v.name ? v.name.split(' (')[0] : 'ডিফল্ট';
+              const isSelected = isVariantSelected(selectedCardVariant, v);
+              const cleanName = formatShortColorName(v.name, v.colorCode);
+              const dotStyle = getColorDotStyles(v.colorCode);
               return (
                 <button
                   key={i}
                   type="button"
-                  aria-label={`কালার নির্বাচন করুন: ${v.name}`}
+                  aria-label={`কালার নির্বাচন করুন: ${formatColorLabel(v.name, v.colorCode)}`}
                   onClick={(e) => {
                     e.stopPropagation();
                     onSelectVariant(product.id, v);
                   }}
                   className={`group relative inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl border text-[11px] font-semibold transition-all duration-200 cursor-pointer ${
                     isSelected
-                      ? 'border-[#12372A] bg-emerald-50 text-[#12372A] ring-2 ring-[#12372A]/20 shadow-xs scale-102 font-bold'
-                      : 'border-slate-200 bg-white hover:border-slate-300 text-slate-700 hover:bg-slate-50'
+                      ? 'border-[#12372A] bg-emerald-50 text-[#12372A] ring-2 ring-[#12372A]/20 shadow-xs font-bold'
+                      : 'border-slate-300 bg-white hover:border-slate-400 text-slate-800 hover:bg-slate-50'
                   }`}
-                  title={`${v.name} (স্টক: ${v.stock})`}
+                  title={`${formatColorLabel(v.name, v.colorCode)} (স্টক: ${v.stock})`}
                 >
-                  {/* Pure color dot */}
+                  {/* High contrast color dot */}
                   <span
-                    className="w-3.5 h-3.5 rounded-full border border-black/15 shrink-0 shadow-2xs"
-                    style={{ backgroundColor: v.colorCode || '#12372A' }}
+                    className="w-3.5 h-3.5 rounded-full shrink-0 shadow-2xs"
+                    style={{
+                      backgroundColor: dotStyle.backgroundColor,
+                      border: `1.5px solid ${dotStyle.borderColor}`,
+                    }}
                   ></span>
-                  <span>{cleanName}</span>
-                  {isSelected && <Check size={11} className="text-emerald-700 stroke-[2.5]" />}
+                  <span className="text-slate-800 font-bold">{cleanName}</span>
+                  {isSelected && <Check size={11} className="text-emerald-800 stroke-[2.5]" />}
                 </button>
               );
             })}
@@ -152,19 +155,20 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
             <button
               type="button"
               onClick={() => onAddToCart(product, selectedCardVariant, defaultSize)}
-              className="btn btn-xs bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold rounded-lg border-0 shadow-xs gap-1"
+              className="btn btn-xs sm:btn-sm bg-amber-400 hover:bg-amber-500 text-slate-950 font-black rounded-lg border-0 shadow-xs gap-1 flex items-center justify-center"
               title="কার্টে যোগ করুন"
               aria-label={`কার্টে যোগ করুন - ${product.title}`}
             >
-              <ShoppingCart size={12} /> কার্ট
+              <ShoppingCart size={13} /> কার্ট
             </button>
             <button
               type="button"
               onClick={() => onOrderNow(product, selectedCardVariant, defaultSize)}
-              className="btn btn-xs bg-[#12372A] hover:bg-[#1a4a39] text-white font-bold rounded-lg border-0 shadow-xs"
+              className="btn btn-xs sm:btn-sm bg-[#12372A] hover:bg-[#1a4a39] text-white font-black rounded-lg border-0 shadow-sm hover:shadow-md transition-all gap-1 flex items-center justify-center"
               aria-label={`এখনই অর্ডার করুন - ${product.title}`}
             >
-              অর্ডার করুন
+              <ShoppingBag size={13} className="text-amber-300" />
+              <span>অর্ডার করুন</span>
             </button>
           </div>
 

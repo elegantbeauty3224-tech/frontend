@@ -473,7 +473,7 @@ export function LandingPageContent() {
   // Navigation and Modal Helpers
   const scrollToGrid = useCallback(() => {
     setIsCheckoutModalOpen(false);
-    const target = document.getElementById('products-grid');
+    const target = document.getElementById('products') || document.getElementById('products-grid');
     if (target) {
       target.scrollIntoView({ behavior: 'smooth' });
     }
@@ -580,14 +580,22 @@ export function LandingPageContent() {
         scrollToGrid();
         return;
       }
-      const chosenVariant =
-        variant ||
-        cardSelectedVariants[prod.id] ||
-        prod.variants?.[0] || {
+      // Ensure chosenVariant belongs to this product's variants
+      let chosenVariant = variant || cardSelectedVariants[prod.id];
+      const hasMatchingVariant = prod.variants?.some(
+        (v) =>
+          v.name?.trim().toLowerCase() === chosenVariant?.name?.trim().toLowerCase() ||
+          (v.colorCode &&
+            chosenVariant?.colorCode &&
+            v.colorCode.toLowerCase() === chosenVariant.colorCode.toLowerCase())
+      );
+      if (!chosenVariant || !hasMatchingVariant) {
+        chosenVariant = prod.variants?.[0] || {
           name: 'ডিফল্ট',
           colorCode: '#12372A',
           stock: prod.stockQuantity || 10,
         };
+      }
       const chosenSize = size || prod.sizes?.[0] || 'Free Size';
       const orderQty = qty > 0 ? qty : 1;
 
@@ -737,15 +745,15 @@ export function LandingPageContent() {
       const data = await res.json();
       if (data.success && data.data) {
         setIsCheckoutModalOpen(false);
-        setCompletedOrder(data.data);
+        const createdOrder = data.data;
+        setCompletedOrder(createdOrder);
         if (isCartCheckout) {
           clearCart();
         }
-        confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
 
         // Meta Pixel: Track Purchase event
         trackPurchase(
-          data.data.orderNumber || 'EB-ORDER',
+          createdOrder.orderNumber || 'EB-ORDER',
           orderItems.map((it) => ({
             id: String(it.product),
             title: it.productTitle,
@@ -754,6 +762,17 @@ export function LandingPageContent() {
           })),
           totalAmount
         );
+
+        // Save order details to sessionStorage and redirect to dedicated confirmation page
+        if (typeof window !== 'undefined') {
+          try {
+            sessionStorage.setItem('last_completed_order', JSON.stringify(createdOrder));
+          } catch (e) {
+            console.warn('Could not save order to sessionStorage:', e);
+          }
+          const orderIdentifier = createdOrder.orderNumber || createdOrder._id || 'EB-ORDER';
+          window.location.href = `/order-success?orderId=${encodeURIComponent(orderIdentifier)}`;
+        }
       } else {
         setErrorMsg(data.message || 'অর্ডারে সমস্যা হয়েছে, পুনরায় চেষ্টা করুন।');
       }

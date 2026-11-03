@@ -21,6 +21,7 @@ import {
   Award,
 } from 'lucide-react';
 import { ProductItem, ProductVariant, ProductReview } from '@/types';
+import { formatColorLabel, formatShortColorName, isVariantSelected, getColorDotStyles } from '@/lib/colorUtils';
 
 interface ProductDetailsModalProps {
   product: ProductItem | null;
@@ -342,14 +343,17 @@ export const ProductDetailsModal = React.memo(function ProductDetailsModal({
               <label className="text-xs font-bold text-slate-800 block mb-1.5 flex items-center justify-between">
                 <span>
                   কালার নির্বাচন করুন:{' '}
-                  <span className="text-emerald-800 font-extrabold">{selectedVariant?.name || 'ডিফল্ট'}</span>
+                  <span className="text-emerald-800 font-extrabold bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                    {formatColorLabel(selectedVariant?.name, selectedVariant?.colorCode)}
+                  </span>
                 </span>
                 <span className="text-[10px] text-slate-400">ছবি দেখতে কালারে ক্লিক করুন</span>
               </label>
               <div className="flex flex-wrap gap-2">
                 {product.variants.map((v, i) => {
-                  const isSelected = selectedVariant?.name === v.name;
-                  const cleanName = v.name ? v.name.split(' (')[0] : 'ডিফল্ট';
+                  const isSelected = isVariantSelected(selectedVariant, v);
+                  const cleanName = formatShortColorName(v.name, v.colorCode);
+                  const dotStyle = getColorDotStyles(v.colorCode);
                   return (
                     <button
                       key={i}
@@ -357,17 +361,20 @@ export const ProductDetailsModal = React.memo(function ProductDetailsModal({
                       onClick={() => handleSelectVariant(v)}
                       className={`px-3 py-1.5 rounded-xl border flex items-center gap-2 transition-all cursor-pointer ${
                         isSelected
-                          ? 'border-[#12372A] bg-emerald-50 ring-2 ring-[#12372A]/20 font-bold shadow-xs text-[#12372A]'
-                          : 'border-slate-200 bg-white hover:border-slate-300 text-slate-700 hover:bg-slate-50'
+                          ? 'border-[#12372A] bg-emerald-50 ring-2 ring-[#12372A]/30 font-bold shadow-xs text-[#12372A]'
+                          : 'border-slate-300 bg-white hover:border-slate-400 text-slate-800 hover:bg-slate-50 font-medium'
                       }`}
                     >
-                      {/* Pure color dot */}
+                      {/* High contrast color dot */}
                       <span
-                        className="w-4 h-4 rounded-full border border-black/15 shrink-0 shadow-2xs"
-                        style={{ backgroundColor: v.colorCode || '#12372A' }}
+                        className="w-4 h-4 rounded-full shrink-0 shadow-2xs"
+                        style={{
+                          backgroundColor: dotStyle.backgroundColor,
+                          border: `1.5px solid ${dotStyle.borderColor}`,
+                        }}
                       ></span>
-                      <span className="text-xs font-bold">{cleanName}</span>
-                      {isSelected && <Check size={13} className="text-emerald-700 stroke-[2.5]" />}
+                      <span className="text-xs font-bold text-slate-800">{cleanName}</span>
+                      {isSelected && <Check size={13} className="text-emerald-800 stroke-[2.5]" />}
                     </button>
                   );
                 })}
@@ -422,23 +429,24 @@ export const ProductDetailsModal = React.memo(function ProductDetailsModal({
             </div>
 
             {/* Primary Action Buttons */}
-            <div className="pt-2 flex flex-col sm:flex-row gap-2 sm:gap-2.5">
+            {/* Action Buttons: Prominent Order Now */}
+            <div className="pt-2 flex flex-col sm:flex-row gap-2.5 sm:gap-3">
               <button
                 type="button"
-                onClick={handleAddToCart}
-                className="btn btn-md bg-amber-400 hover:bg-amber-500 text-slate-950 font-black rounded-xl border-0 shadow-md gap-2 flex-1 w-full sm:w-auto"
+                onClick={handleOrderNow}
+                className="btn btn-lg bg-[#12372A] hover:bg-[#1a4a39] text-white font-black text-sm sm:text-base rounded-2xl border-0 shadow-lg hover:shadow-xl gap-2 flex-1 w-full sm:w-auto transition-all transform hover:-translate-y-0.5 animate-pulse-glow"
               >
-                <ShoppingCart size={18} />
-                কার্টে যোগ করুন
+                <ShoppingBag size={20} className="text-amber-300 shrink-0" />
+                <span>এখনই অর্ডার করুন (ক্যাশ অন ডেলিভারি)</span>
               </button>
 
               <button
                 type="button"
-                onClick={handleOrderNow}
-                className="btn btn-md bg-[#12372A] hover:bg-[#1a4a39] text-white font-black rounded-xl border-0 shadow-md gap-2 flex-1 w-full sm:w-auto"
+                onClick={handleAddToCart}
+                className="btn btn-md sm:btn-lg bg-amber-400 hover:bg-amber-500 text-slate-950 font-black rounded-2xl border-0 shadow-md gap-2 w-full sm:w-auto"
               >
-                <ShoppingBag size={18} />
-                এখনই অর্ডার করুন (COD)
+                <ShoppingCart size={18} />
+                কার্টে যোগ করুন
               </button>
 
               <a

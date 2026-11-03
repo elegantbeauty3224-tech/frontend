@@ -45,7 +45,8 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
   copiedId,
 }) => {
   return (
-    <section id="products-grid" className="max-w-6xl mx-auto px-4 py-12 border-t border-slate-200/60">
+    <section id="products" className="scroll-mt-20 max-w-6xl mx-auto px-4 py-12 border-t border-slate-200/60 relative">
+      <div id="products-grid" className="absolute -top-20 left-0 pointer-events-none" aria-hidden="true" />
       <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
         <div>
           <div className="flex items-center gap-2">

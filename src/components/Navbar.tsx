@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { ShoppingCart, Package, User, ShieldCheck } from 'lucide-react';
+import { ShoppingCart, Package, User, ShieldCheck, ShoppingBag } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 interface NavbarProps {
@@ -44,12 +44,16 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Action Buttons */}
         <div className="flex items-center gap-1.5 sm:gap-2.5">
+          {/* Smooth-Scroll to Products Button */}
           <button
             type="button"
             onClick={onScrollToGrid}
-            className="hidden md:inline-flex btn btn-xs btn-ghost text-slate-700 hover:text-emerald-800 font-bold"
+            className="btn btn-xs sm:btn-sm bg-emerald-50 hover:bg-emerald-100 text-emerald-950 border border-emerald-300 rounded-xl font-bold flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 shadow-2xs hover:shadow-xs transition-all"
+            title="পণ্যসমূহ দেখুন (View Products)"
+            aria-label="পণ্যসমূহ দেখুন"
           >
-            সকল পণ্য
+            <ShoppingBag size={14} className="text-emerald-700 shrink-0" />
+            <span className="text-xs">পণ্যসমূহ দেখুন</span>
           </button>
 
           {/* Track Order Shortcut Button */}
@@ -126,11 +130,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           )}
 
-          {/* Checkout Button */}
+          {/* Prominent Order Now Button */}
           <button
             type="button"
             onClick={onOpenCheckout}
-            className="btn btn-xs sm:btn-sm bg-[#12372A] hover:bg-[#1a4a39] text-white rounded-xl font-bold border-0 shadow-xs"
+            className="btn btn-xs sm:btn-sm bg-[#12372A] hover:bg-[#1a4a39] text-white rounded-xl font-black border-0 shadow-md hover:shadow-lg transition-all animate-pulse-glow"
           >
             অর্ডার করুন
           </button>

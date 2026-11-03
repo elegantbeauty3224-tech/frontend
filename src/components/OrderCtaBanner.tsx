@@ -31,17 +31,17 @@ export const OrderCtaBanner: React.FC<OrderCtaBannerProps> = React.memo(({
             <button
               type="button"
               onClick={onOpenCheckout}
-              className="btn btn-md sm:btn-lg bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 font-black px-6 sm:px-8 rounded-2xl border-0 shadow-lg hover:shadow-2xl gap-2 transition-all transform hover:-translate-y-0.5 w-full sm:w-auto"
+              className="btn btn-md sm:btn-lg bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 font-black px-7 sm:px-9 rounded-2xl border-0 shadow-xl hover:shadow-2xl gap-2.5 transition-all transform hover:-translate-y-0.5 animate-pulse-glow w-full sm:w-auto"
             >
-              <ShoppingBag size={18} />
+              <ShoppingBag size={20} />
               এখনই অর্ডার করুন (ক্যাশ অন ডেলিভারি)
             </button>
             <button
               type="button"
               onClick={onScrollToGrid}
-              className="btn btn-md sm:btn-lg btn-outline border-white/30 text-white hover:bg-white hover:text-slate-950 font-bold rounded-2xl w-full sm:w-auto"
+              className="btn btn-md sm:btn-lg btn-outline border-white/40 text-white hover:bg-white hover:text-slate-950 font-bold rounded-2xl w-full sm:w-auto"
             >
-              অন্যান্য পণ্য দেখুন
+              পণ্যসমূহ দেখুন
             </button>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-4 pt-3 text-[11px] text-emerald-200">

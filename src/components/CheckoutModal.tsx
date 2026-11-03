@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { CartItem, ProductItem, ProductVariant, DeliveryLocationConfig } from '../types';
 import { useAuth } from '../context/AuthContext';
+import { formatColorLabel, formatShortColorName, isVariantSelected, getColorDotStyles } from '../lib/colorUtils';
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -502,10 +503,15 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                       <h5 className="font-bold text-slate-900 text-xs sm:text-sm line-clamp-1">{currentProduct.title}</h5>
                       <div className="flex items-center gap-1.5 mt-0.5">
                         <span
-                          className="w-2.5 h-2.5 rounded-full border border-black/10 shadow-2xs"
-                          style={{ backgroundColor: selectedVariant?.colorCode || '#12372A' }}
+                          className="w-2.5 h-2.5 rounded-full shrink-0 shadow-2xs"
+                          style={{
+                            backgroundColor: getColorDotStyles(selectedVariant?.colorCode).backgroundColor,
+                            border: `1px solid ${getColorDotStyles(selectedVariant?.colorCode).borderColor}`,
+                          }}
                         ></span>
-                        <span className="text-emerald-900 font-bold text-[11px]">{selectedVariant?.name || 'ডিফল্ট'}</span>
+                        <span className="text-emerald-900 font-bold text-[11px]">
+                          {formatColorLabel(selectedVariant?.name, selectedVariant?.colorCode)}
+                        </span>
                         <span className="text-slate-400">• সাইজ: {selectedSize}</span>
                       </div>
                       <div className="flex items-center gap-2 mt-1.5">
@@ -541,11 +547,14 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 <div>
                   <label className="text-xs font-bold text-slate-800 block mb-1 flex items-center justify-between">
                     <span>কালার বাছাই করুন:</span>
-                    <span className="text-emerald-800 font-extrabold text-[11px]">{selectedVariant?.name || 'ডিফল্ট'}</span>
+                    <span className="text-emerald-800 font-extrabold text-[11px] bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                      {formatColorLabel(selectedVariant?.name, selectedVariant?.colorCode)}
+                    </span>
                   </label>
                   <div className="grid grid-cols-2 gap-1.5">
                     {(currentProduct.variants || []).map((v, i) => {
-                      const isSelected = selectedVariant?.name === v.name;
+                      const isSelected = isVariantSelected(selectedVariant, v);
+                      const dotStyle = getColorDotStyles(v.colorCode);
                       return (
                         <button
                           key={i}
@@ -554,16 +563,21 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                           className={`p-2 rounded-xl border flex items-center gap-2 text-left transition-all cursor-pointer ${
                             isSelected
                               ? 'border-[#12372A] bg-emerald-50 ring-2 ring-[#12372A]/20 font-bold shadow-xs text-[#12372A]'
-                              : 'border-slate-200 bg-white hover:border-slate-300 text-slate-700 hover:bg-slate-50'
+                              : 'border-slate-300 bg-white hover:border-slate-400 text-slate-800 hover:bg-slate-50'
                           }`}
                         >
-                          {/* Pure color dot */}
+                          {/* High contrast color dot */}
                           <span
-                            className="w-4 h-4 rounded-full border border-black/15 shrink-0 shadow-2xs"
-                            style={{ backgroundColor: v.colorCode || '#12372A' }}
+                            className="w-4 h-4 rounded-full shrink-0 shadow-2xs"
+                            style={{
+                              backgroundColor: dotStyle.backgroundColor,
+                              border: `1.5px solid ${dotStyle.borderColor}`,
+                            }}
                           ></span>
-                          <span className="text-xs font-semibold truncate flex-1">{v.name ? v.name.split(' (')[0] : 'ডিফল্ট'}</span>
-                          {isSelected && <Check size={13} className="text-emerald-700 shrink-0 stroke-[2.5]" />}
+                          <span className="text-xs font-semibold truncate flex-1 text-slate-800">
+                            {formatShortColorName(v.name, v.colorCode)}
+                          </span>
+                          {isSelected && <Check size={13} className="text-emerald-800 shrink-0 stroke-[2.5]" />}
                         </button>
                       );
                     })}
@@ -675,7 +689,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full btn btn-md sm:btn-lg bg-[#12372A] hover:bg-[#1a4a39] text-white font-black text-sm sm:text-base rounded-2xl border-0 shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-0.5 gap-2"
+                className="w-full btn btn-md sm:btn-lg bg-[#12372A] hover:bg-[#1a4a39] text-white font-black text-sm sm:text-base rounded-2xl border-0 shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-0.5 gap-2 animate-pulse-glow"
               >
                 {isSubmitting ? (
                   <span className="loading loading-spinner"></span>

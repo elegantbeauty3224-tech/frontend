@@ -25,47 +25,48 @@ export const Navbar: React.FC<NavbarProps> = ({
   const { user, isVerified, signInWithGoogle, loading } = useAuth();
 
   return (
-    <nav className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-3 sm:px-4 py-2 transition-all shadow-xs">
-      <div className="max-w-6xl mx-auto flex items-center justify-between gap-2 sm:gap-3">
+    <nav className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-2.5 sm:px-4 py-2 transition-all shadow-xs">
+      <div className="max-w-6xl mx-auto flex items-center justify-between gap-1.5 sm:gap-3">
         {/* Brand / Logo */}
-        <div className="flex items-center gap-2 sm:gap-2.5 cursor-pointer" onClick={onScrollToGrid}>
+        <div className="flex items-center gap-1.5 sm:gap-2.5 cursor-pointer shrink-0" onClick={onScrollToGrid}>
           <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden border-2 border-emerald-800/30 shadow-xs shrink-0">
             <Image src="/logo-light.jpeg" alt="Logo" fill className="object-cover" />
           </div>
-          <div>
-            <span className="font-black text-slate-900 text-sm sm:text-base tracking-tight block leading-none">
+          <div className="min-w-0">
+            <span className="font-black text-slate-900 text-xs sm:text-base tracking-tight block leading-none">
               Elegant Beauty
             </span>
-            <span className="text-[9px] sm:text-[10px] text-emerald-800 font-semibold tracking-wide">
+            <span className="text-[9px] sm:text-[10px] text-emerald-800 font-semibold tracking-wide hidden sm:block">
               অফিসিয়াল স্টোর
             </span>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center gap-1.5 sm:gap-2.5">
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
           {/* Smooth-Scroll to Products Button */}
           <button
             type="button"
             onClick={onScrollToGrid}
-            className="btn btn-xs sm:btn-sm bg-emerald-50 hover:bg-emerald-100 text-emerald-950 border border-emerald-300 rounded-xl font-bold flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 shadow-2xs hover:shadow-xs transition-all"
+            className="btn btn-xs sm:btn-sm bg-emerald-50 hover:bg-emerald-100 text-emerald-950 border border-emerald-300 rounded-xl font-bold flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 shadow-2xs hover:shadow-xs transition-all shrink-0"
             title="পণ্যসমূহ দেখুন (View Products)"
             aria-label="পণ্যসমূহ দেখুন"
           >
-            <ShoppingBag size={14} className="text-emerald-700 shrink-0" />
-            <span className="text-xs">পণ্যসমূহ দেখুন</span>
+            <ShoppingBag size={13} className="text-emerald-700 shrink-0" />
+            <span className="text-[11px] sm:text-xs">পণ্যসমূহ</span>
+            <span className="hidden sm:inline text-xs">দেখুন</span>
           </button>
 
-          {/* Track Order Shortcut Button */}
+          {/* Track Order Shortcut Button (Tablet & Desktop only; Mobile accesses via Profile) */}
           <button
             type="button"
             onClick={onOpenProfile}
-            className="btn btn-xs sm:btn-sm btn-ghost text-slate-700 hover:text-emerald-800 hover:bg-emerald-50 rounded-xl font-bold gap-1 px-2 sm:px-3"
+            className="hidden sm:inline-flex btn btn-xs sm:btn-sm btn-ghost text-slate-700 hover:text-emerald-800 hover:bg-emerald-50 rounded-xl font-bold gap-1 px-2 sm:px-3 shrink-0"
             title="আপনার অর্ডার ট্র্যাক করুন"
             aria-label="আপনার অর্ডার ট্র্যাক করুন"
           >
             <Package size={14} className="text-emerald-700" />
-            <span className="hidden sm:inline">অর্ডার ট্র্যাক</span>
+            <span className="hidden md:inline">অর্ডার ট্র্যাক</span>
           </button>
 
           {/* User Profile / Google Sign-In Button */}
@@ -73,7 +74,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               type="button"
               onClick={onOpenProfile}
-              className="btn btn-xs sm:btn-sm bg-emerald-50 hover:bg-emerald-100/80 text-emerald-950 border border-emerald-300 rounded-xl font-bold gap-1.5 p-1 sm:px-2.5 shadow-2xs"
+              className="btn btn-xs sm:btn-sm bg-emerald-50 hover:bg-emerald-100/80 text-emerald-950 border border-emerald-300 rounded-xl font-bold gap-1 sm:gap-1.5 p-1 sm:px-2.5 shadow-2xs shrink-0"
               title={`${user.displayName || 'User'} - প্রোফাইল ও অর্ডার ট্র্যাক`}
               aria-label={`${user.displayName || 'ব্যবহারকারী'} প্রোফাইল ও অর্ডার`}
             >
@@ -95,7 +96,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <span className="absolute bottom-0 right-0 w-2 h-2 bg-emerald-500 rounded-full border border-white" />
                 )}
               </div>
-              <span className="text-xs max-w-[80px] sm:max-w-[110px] truncate hidden sm:inline">
+              <span className="text-xs max-w-[70px] sm:max-w-[110px] truncate hidden md:inline">
                 {user.displayName?.split(' ')[0] || 'প্রোফাইল'}
               </span>
               <ShieldCheck size={13} className="text-emerald-600 hidden md:inline" />
@@ -104,7 +105,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               type="button"
               onClick={onOpenProfile}
-              className="btn btn-xs sm:btn-sm bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 rounded-xl font-bold gap-1.5 shadow-2xs"
+              className="btn btn-xs sm:btn-sm bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 rounded-xl font-bold gap-1 sm:gap-1.5 p-1 sm:px-2 shadow-2xs shrink-0"
               title="Google দিয়ে লগইন করুন"
               aria-label="Google দিয়ে লগইন করুন"
             >
@@ -126,15 +127,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
                 />
               </svg>
-              <span className="text-xs">লগইন</span>
+              <span className="text-xs hidden sm:inline">লগইন</span>
             </button>
           )}
 
-          {/* Prominent Order Now Button */}
+          {/* Prominent Order Now Button (Desktop and tablet only - on mobile, persistent bottom bar handles Order Now!) */}
           <button
             type="button"
             onClick={onOpenCheckout}
-            className="btn btn-xs sm:btn-sm bg-[#12372A] hover:bg-[#1a4a39] text-white rounded-xl font-black border-0 shadow-md hover:shadow-lg transition-all animate-pulse-glow"
+            className="hidden md:inline-flex btn btn-xs sm:btn-sm bg-[#12372A] hover:bg-[#1a4a39] text-white rounded-xl font-black border-0 shadow-md hover:shadow-lg transition-all animate-pulse-glow shrink-0"
           >
             অর্ডার করুন
           </button>
@@ -143,13 +144,13 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             type="button"
             onClick={onOpenCart}
-            className={`btn btn-xs sm:btn-sm bg-emerald-50 hover:bg-emerald-100 text-emerald-950 border border-emerald-300 rounded-xl font-black gap-1 sm:gap-1.5 transition-transform ${
+            className={`btn btn-xs sm:btn-sm bg-emerald-50 hover:bg-emerald-100 text-emerald-950 border border-emerald-300 rounded-xl font-black gap-1 sm:gap-1.5 px-2 sm:px-2.5 transition-transform shrink-0 ${
               cartBump ? 'scale-110 ring-2 ring-emerald-500' : ''
             }`}
             title="শপিং ব্যাগ দেখুন"
             aria-label={`শপিং ব্যাগ দেখুন (${cartTotalItems} টি পণ্য)`}
           >
-            <ShoppingCart size={14} className="text-emerald-700" />
+            <ShoppingCart size={14} className="text-emerald-700 shrink-0" />
             <span className="hidden sm:inline">ব্যাগ</span>
             <span className="badge badge-xs bg-emerald-800 text-white font-mono font-bold px-1.5 py-0.5">
               {cartTotalItems}

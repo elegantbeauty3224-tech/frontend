@@ -98,7 +98,7 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
               <span>কালার:</span>
               <span className="text-emerald-800 font-extrabold">{variantDisplayName}</span>
             </span>
-            <span className="text-[10px] text-slate-400">ছবি পরিবর্তন করতে ক্লিক করুন</span>
+            
           </div>
 
           <div className="flex items-center gap-1.5 flex-wrap">

@@ -689,13 +689,13 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full btn btn-md sm:btn-lg bg-[#12372A] hover:bg-[#1a4a39] text-white font-black text-sm sm:text-base rounded-2xl border-0 shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-0.5 gap-2 animate-pulse-glow"
+                className="w-full btn min-h-[52px] h-auto py-3.5 bg-[#12372A] hover:bg-[#1a4a39] text-white font-black text-base sm:text-lg rounded-2xl border-0 shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-0.5 gap-2 animate-pulse-glow flex items-center justify-center"
               >
                 {isSubmitting ? (
                   <span className="loading loading-spinner"></span>
                 ) : (
                   <>
-                    <Lock size={17} className="text-amber-300" />
+                    <Lock size={18} className="text-amber-300 shrink-0" />
                     <span>অর্ডার কনফার্ম করুন (COD) - ৳{totalAmount}</span>
                   </>
                 )}
@@ -704,7 +704,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               <button
                 type="button"
                 onClick={signInWithGoogle}
-                className="w-full btn btn-md sm:btn-lg bg-emerald-700 hover:bg-emerald-800 text-white font-black text-sm sm:text-base rounded-2xl border-0 shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-0.5 gap-2.5"
+                className="w-full btn min-h-[52px] h-auto py-3.5 bg-emerald-700 hover:bg-emerald-800 text-white font-black text-sm sm:text-base rounded-2xl border-0 shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-0.5 gap-2.5 flex items-center justify-center"
               >
                 <svg className="w-5 h-5 bg-white rounded-full p-0.5 shrink-0" viewBox="0 0 24 24">
                   <path

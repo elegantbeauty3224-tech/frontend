@@ -434,19 +434,19 @@ export const ProductDetailsModal = React.memo(function ProductDetailsModal({
               <button
                 type="button"
                 onClick={handleOrderNow}
-                className="btn btn-lg bg-[#12372A] hover:bg-[#1a4a39] text-white font-black text-sm sm:text-base rounded-2xl border-0 shadow-lg hover:shadow-xl gap-2 flex-1 w-full sm:w-auto transition-all transform hover:-translate-y-0.5 animate-pulse-glow"
+                className="btn min-h-[52px] h-auto py-3.5 sm:py-4 bg-[#12372A] hover:bg-[#1a4a39] text-white font-black text-base sm:text-lg rounded-2xl border-0 shadow-lg hover:shadow-xl gap-2.5 flex-1 w-full sm:w-auto transition-all transform hover:-translate-y-0.5 animate-pulse-glow flex items-center justify-center"
               >
-                <ShoppingBag size={20} className="text-amber-300 shrink-0" />
+                <ShoppingBag size={22} className="text-amber-300 shrink-0" />
                 <span>এখনই অর্ডার করুন (ক্যাশ অন ডেলিভারি)</span>
               </button>
 
               <button
                 type="button"
                 onClick={handleAddToCart}
-                className="btn btn-md sm:btn-lg bg-amber-400 hover:bg-amber-500 text-slate-950 font-black rounded-2xl border-0 shadow-md gap-2 w-full sm:w-auto"
+                className="btn min-h-[52px] h-auto py-3.5 sm:py-4 bg-amber-400 hover:bg-amber-500 text-slate-950 font-black text-base rounded-2xl border-0 shadow-md gap-2 w-full sm:w-auto flex items-center justify-center"
               >
-                <ShoppingCart size={18} />
-                কার্টে যোগ করুন
+                <ShoppingCart size={20} />
+                <span>কার্টে যোগ করুন</span>
               </button>
 
               <a
@@ -455,11 +455,11 @@ export const ProductDetailsModal = React.memo(function ProductDetailsModal({
                 )}`}
                 target="_blank"
                 rel="noreferrer"
-                className="btn btn-md bg-[#25D366] hover:bg-[#20ba59] text-white border-0 rounded-xl w-full sm:w-auto flex items-center justify-center gap-2"
+                className="btn min-h-[52px] h-auto py-3.5 sm:py-4 bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-base border-0 rounded-2xl w-full sm:w-auto flex items-center justify-center gap-2"
                 title="হোয়াটসঅ্যাপে যোগাযোগ"
               >
-                <MessageCircle size={18} />
-                <span className="sm:hidden font-bold text-xs">WhatsApp এ মেসেজ দিন</span>
+                <MessageCircle size={20} />
+                <span className="sm:hidden font-bold">WhatsApp এ মেসেজ দিন</span>
               </a>
             </div>
           </div>

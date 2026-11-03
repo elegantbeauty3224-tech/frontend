@@ -87,7 +87,7 @@ export const HeroIntro: React.FC<HeroIntroProps> = ({
         <button
           type="button"
           onClick={onOrderNow}
-          className="btn btn-lg bg-[#12372A] hover:bg-[#1a4a39] text-white font-black text-base sm:text-lg px-7 sm:px-9 py-3.5 sm:py-4 rounded-2xl shadow-xl hover:shadow-2xl border-0 gap-2.5 transition-all transform hover:-translate-y-0.5 animate-pulse-glow flex items-center justify-center w-full sm:w-auto"
+          className="btn min-h-[52px] h-auto py-3.5 sm:py-4 bg-[#12372A] hover:bg-[#1a4a39] text-white font-black text-base sm:text-lg px-7 sm:px-9 rounded-2xl shadow-xl hover:shadow-2xl border-0 gap-2.5 transition-all transform hover:-translate-y-0.5 animate-pulse-glow flex items-center justify-center w-full sm:w-auto"
         >
           <ShoppingBag size={22} className="text-amber-300 shrink-0" />
           <span>এখনই অর্ডার করুন (ক্যাশ অন ডেলিভারি)</span>
@@ -96,18 +96,18 @@ export const HeroIntro: React.FC<HeroIntroProps> = ({
         <button
           type="button"
           onClick={onAddToCart}
-          className="btn btn-md sm:btn-lg bg-amber-400 hover:bg-amber-500 text-slate-950 font-extrabold px-6 rounded-2xl shadow-md border-0 gap-2 transition-all transform hover:-translate-y-0.5 w-full sm:w-auto"
+          className="btn min-h-[52px] h-auto py-3.5 sm:py-4 bg-amber-400 hover:bg-amber-500 text-slate-950 font-black text-base px-6 rounded-2xl shadow-md border-0 gap-2 transition-all transform hover:-translate-y-0.5 w-full sm:w-auto flex items-center justify-center"
         >
-          <ShoppingCart size={18} />
-          কার্টে যোগ করুন
+          <ShoppingCart size={20} />
+          <span>কার্টে যোগ করুন</span>
         </button>
 
         <button
           type="button"
           onClick={onScrollToGrid}
-          className="btn btn-md sm:btn-lg btn-outline border-emerald-800 text-emerald-900 hover:bg-emerald-900 hover:text-white font-bold px-6 rounded-2xl w-full sm:w-auto"
+          className="btn min-h-[52px] h-auto py-3.5 sm:py-4 btn-outline border-emerald-800 text-emerald-900 hover:bg-emerald-900 hover:text-white font-bold text-base px-6 rounded-2xl w-full sm:w-auto flex items-center justify-center"
         >
-          পণ্যসমূহ দেখুন
+          <span>পণ্যসমূহ দেখুন</span>
         </button>
       </div>
     </section>

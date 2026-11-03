@@ -157,3 +157,4 @@ export function getColorDotStyles(colorCode?: string): {
     borderColor: 'rgba(0,0,0,0.2)',
   };
 }
+

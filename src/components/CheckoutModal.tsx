@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import {
   ShoppingBag, ShieldCheck, Truck, CheckCircle2, User, Phone,
   Mail, MapPin, AlertCircle, FileText, ShoppingCart, Plus, Minus,
-  Trash2, Check, Lock, X
+  Trash2, Check, Lock, X, Sparkles, MessageCircle, Copy
 } from 'lucide-react';
 import { CartItem, ProductItem, ProductVariant, DeliveryLocationConfig } from '../types';
 import { useAuth } from '../context/AuthContext';
@@ -91,6 +91,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   onAddMoreProducts,
 }) => {
   const { user, isVerified, signInWithGoogle } = useAuth();
+  const [copyToast, setCopyToast] = useState<string | null>(null);
 
   useEffect(() => {
     if (isOpen && user) {
@@ -103,6 +104,60 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     }
   }, [isOpen, user]);
 
+  const buildOrderText = () => {
+    let itemsText = '';
+    if (hasCartItems && cart.length > 0) {
+      itemsText = cart
+        .map(
+          (it, idx) =>
+            `${idx + 1}. ${it.productTitle}\n   কালার: ${it.variantName} | সাইজ: ${it.size} | পরিমাণ: ${it.quantity} টি | মূল্য: ৳${it.unitPrice * it.quantity}`
+        )
+        .join('\n');
+    } else if (currentProduct) {
+      itemsText = `• পণ্য: ${currentProduct.title}\n• কালার: ${selectedVariant?.name || 'ডিফল্ট'}\n• সাইজ: ${selectedSize || 'Free Size'}\n• পরিমাণ: ${singleProductQty} টি\n• পণ্যের মূল্য: ৳${subtotal}`;
+    }
+
+    const areaName = deliveryArea === 'outside_dhaka' ? 'ঢাকার বাইরে (৳130)' : 'ঢাকার ভিতরে (৳70)';
+
+    return `আসসালামু আলাইকুম, আমি Elegant Beauty থেকে অর্ডার করতে চাই।
+
+📦 অর্ডারের বিস্তারিত:
+${itemsText}
+
+🚚 ডেলিভারি এরিয়া: ${areaName}
+💰 মোট প্রদেয় বিল: ৳${totalAmount} (ক্যাশ অন ডেলিভারি)
+
+👤 গ্রাহকের তথ্য:
+• নাম: ${customerName.trim() || '(নাম দেওয়া হয়নি)'}
+• মোবাইল নম্বর: ${phoneNumber.trim() || '(নম্বর দেওয়া হয়নি)'}
+• ডেলিভারি ঠিকানা: ${deliveryAddress.trim() || '(ঠিকানা দেওয়া হয়নি)'}${customerEmail.trim() ? `\n• ইমেইল: ${customerEmail.trim()}` : ''}${notes.trim() ? `\n• বিশেষ নোট: ${notes.trim()}` : ''}`;
+  };
+
+  const handleWhatsAppOrder = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const text = buildOrderText();
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(text).catch(() => {});
+    }
+    setCopyToast('অর্ডারের সকল তথ্য কপি হয়েছে এবং WhatsApp-এ পাঠানো হচ্ছে!');
+    setTimeout(() => setCopyToast(null), 4000);
+
+    const waUrl = `https://wa.me/8801648439277?text=${encodeURIComponent(text)}`;
+    window.open(waUrl, '_blank');
+  };
+
+  const handleMessengerOrder = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const text = buildOrderText();
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(text).catch(() => {});
+    }
+    setCopyToast('অর্ডারের তথ্য কপি হয়েছে! Messenger-এ পেস্ট (Ctrl+V) করে পাঠিয়ে দিন।');
+    setTimeout(() => setCopyToast(null), 6000);
+
+    window.open('https://m.me/elegantbeauty.xyz', '_blank');
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -111,13 +166,27 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
         {/* Modal Header & Close Button */}
         <div className="flex justify-between items-start border-b border-slate-200 pb-3 mb-6">
           <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center">
+            <div className="flex items-center gap-2 flex-wrap">
+              <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
                 <ShoppingBag size={18} />
               </div>
               <h3 className="font-black text-lg sm:text-xl text-[#12372A]">
                 ক্যাশ অন ডেলিভারি চেকআউট
               </h3>
+
+              {/* Facebook Page Official Badge & Link */}
+              <a
+                href="https://web.facebook.com/elegantbeauty.xyz"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-[11px] font-bold transition-all shadow-2xs hover:shadow-xs"
+                title="আমাদের অফিশিয়াল ফেসবুক পেজ দেখুন"
+              >
+                <svg className="w-3.5 h-3.5 fill-[#1877F2]" viewBox="0 0 24 24">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+                <span>অফিসিয়াল ফেসবুক পেজ</span>
+              </a>
             </div>
             <p className="text-xs text-slate-500">
               নিচের ফর্মে সঠিক তথ্য দিন। কোনো অগ্রিম টাকা লাগবে না, পণ্য হাতে পেয়ে মূল্য পরিশোধ করবেন।
@@ -190,24 +259,24 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 </span>
               </div>
             ) : (
-              <div className="bg-gradient-to-r from-emerald-50 via-teal-50 to-amber-50 border-2 border-emerald-400 rounded-2xl p-3 sm:p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs animate-fade-in">
+              <div className="bg-gradient-to-r from-emerald-50/90 via-teal-50/70 to-amber-50/80 border border-emerald-300 rounded-2xl p-3 sm:p-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs animate-fade-in">
                 <div className="flex items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
-                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-[#12372A] text-white flex items-center justify-center shrink-0 shadow-xs">
-                    <Lock size={17} className="text-amber-300" />
+                  <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-100 text-[#12372A] flex items-center justify-center shrink-0 shadow-2xs">
+                    <Sparkles size={16} className="text-emerald-800" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <h5 className="font-extrabold text-slate-900 text-xs sm:text-sm">
-                      অর্ডার করতে লগইন আবশ্যক
+                      লগইন ছাড়াই নিচে সরাসরি অর্ডার করতে পারেন
                     </h5>
                     <p className="text-[11px] sm:text-xs text-slate-600 mt-0.5">
-                      অর্ডার সম্পন্ন ও ট্র্যাক করতে ১-ক্লিকে Google দিয়ে লগইন করুন
+                      অথবা অর্ডার সেভ ও ট্র্যাক করতে চাইলে ১-ক্লিকে Google লগইন করতে পারেন (ঐচ্ছিক)
                     </p>
                   </div>
                 </div>
                 <button
                   type="button"
                   onClick={signInWithGoogle}
-                  className="btn btn-sm bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 hover:border-emerald-600 rounded-xl font-bold gap-2 shadow-xs w-full sm:w-auto shrink-0 justify-center text-xs"
+                  className="btn btn-xs sm:btn-sm bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 hover:border-emerald-600 rounded-xl font-bold gap-1.5 shadow-2xs w-full sm:w-auto shrink-0 justify-center text-xs"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24">
                     <path
@@ -227,7 +296,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                       d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
                     />
                   </svg>
-                  <span>Google লগইন করুন</span>
+                  <span>Google লগইন (ঐচ্ছিক)</span>
                 </button>
               </div>
             )}
@@ -276,16 +345,22 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               <p className="text-[11px] text-slate-500 mt-1">অর্ডার নিশ্চিত করার জন্য এই নম্বরে কল দেওয়া হবে।</p>
             </div>
 
-            {/* Customer Email (Read-Only Verified Field) */}
+            {/* Customer Email */}
             <div>
               <div className="flex items-center justify-between mb-1">
                 <label htmlFor="modalCustomerEmail" className="block text-xs sm:text-sm font-bold text-slate-900">
-                  ইমেইল অ্যাড্রেস
+                  ইমেইল অ্যাড্রেস <span className="text-slate-400 font-normal text-xs">(ঐচ্ছিক)</span>
                 </label>
-                <span className="text-[10px] text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 font-bold flex items-center gap-1">
-                  <ShieldCheck size={11} className="text-emerald-600" />
-                  Google ভেরিফাইড (Read-Only)
-                </span>
+                {user?.email ? (
+                  <span className="text-[10px] text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 font-bold flex items-center gap-1">
+                    <ShieldCheck size={11} className="text-emerald-600" />
+                    Google ভেরিফাইড (Read-Only)
+                  </span>
+                ) : (
+                  <span className="text-[10px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200 font-medium">
+                    ঐচ্ছিক / Optional
+                  </span>
+                )}
               </div>
               <div className="relative">
                 <input
@@ -293,16 +368,25 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   id="modalCustomerEmail"
                   name="customerEmail"
                   autoComplete="email"
-                  readOnly
-                  placeholder={user?.email || "Google লগইন থেকে স্বয়ংক্রিয়ভাবে যুক্ত হবে"}
-                  value={customerEmail || user?.email || ''}
-                  className="input input-bordered w-full rounded-xl bg-slate-100 text-slate-700 font-mono text-sm cursor-not-allowed pl-10 border-slate-300 focus:outline-hidden select-none"
-                  title="এই ইমেইলটি আপনার Google অ্যাকাউন্ট থেকে নির্ধারিত এবং পরিবর্তনযোগ্য নয়।"
+                  readOnly={Boolean(user?.email)}
+                  placeholder="যেমন: name@example.com (ইনভয়েস পেতে চাইলে লিখুন)"
+                  value={customerEmail}
+                  onChange={(e) => setCustomerEmail(e.target.value)}
+                  className={`input input-bordered w-full rounded-xl text-sm pl-10 ${
+                    user?.email
+                      ? 'bg-slate-100 text-slate-700 font-mono cursor-not-allowed border-slate-300 focus:outline-hidden select-none'
+                      : 'bg-slate-50 text-slate-900 focus:border-[#12372A] focus:bg-white'
+                  }`}
+                  title={user?.email ? "এই ইমেইলটি আপনার Google অ্যাকাউন্ট থেকে নির্ধারিত।" : "আপনার ইমেইল অ্যাড্রেস (ঐচ্ছিক)"}
                 />
                 <Mail size={17} className="absolute left-3.5 top-3.5 text-slate-400" />
               </div>
               <p className="text-[11px] text-slate-500 mt-1">
-                🔒 আপনার লগইনকৃত Google অ্যাকাউন্টের ভেরিফাইড ইমেইলে অর্ডারের ইনভয়েস ও ট্র্যাকিং আপডেট পাঠানো হবে।
+                {user?.email ? (
+                  <span>🔒 আপনার লগইনকৃত Google অ্যাকাউন্টের ভেরিফাইড ইমেইলে অর্ডারের ইনভয়েস ও ট্র্যাকিং আপডেট পাঠানো হবে।</span>
+                ) : (
+                  <span>ইমেইল দেওয়া বাধ্যতামূলক নয়। দিলে অর্ডারের ডিজিটাল ইনভয়েস ও ট্র্যাকিং সরাসরি ইমেইলে পাবেন।</span>
+                )}
               </p>
             </div>
 
@@ -684,49 +768,70 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               </div>
             </div>
 
-            {/* Submit CTA Button */}
-            {user ? (
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full btn min-h-[52px] h-auto py-3.5 bg-[#12372A] hover:bg-[#1a4a39] text-white font-black text-base sm:text-lg rounded-2xl border-0 shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-0.5 gap-2 animate-pulse-glow flex items-center justify-center"
-              >
-                {isSubmitting ? (
-                  <span className="loading loading-spinner"></span>
-                ) : (
-                  <>
-                    <Lock size={18} className="text-amber-300 shrink-0" />
-                    <span>অর্ডার কনফার্ম করুন (COD) - ৳{totalAmount}</span>
-                  </>
-                )}
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={signInWithGoogle}
-                className="w-full btn min-h-[52px] h-auto py-3.5 bg-emerald-700 hover:bg-emerald-800 text-white font-black text-sm sm:text-base rounded-2xl border-0 shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-0.5 gap-2.5 flex items-center justify-center"
-              >
-                <svg className="w-5 h-5 bg-white rounded-full p-0.5 shrink-0" viewBox="0 0 24 24">
-                  <path
-                    fill="#4285F4"
-                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                  />
-                  <path
-                    fill="#34A853"
-                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                  />
-                  <path
-                    fill="#FBBC05"
-                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
-                  />
-                  <path
-                    fill="#EA4335"
-                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
-                  />
-                </svg>
-                <span className="text-xs sm:text-sm">Google লগইন করে অর্ডার করুন - ৳{totalAmount}</span>
-              </button>
-            )}
+            {/* Submit CTA Button (Available for both logged-in users and guest users) */}
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full btn min-h-[52px] h-auto py-3.5 bg-[#12372A] hover:bg-[#1a4a39] text-white font-black text-base sm:text-lg rounded-2xl border-0 shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-0.5 gap-2 animate-pulse-glow flex items-center justify-center cursor-pointer"
+            >
+              {isSubmitting ? (
+                <span className="loading loading-spinner"></span>
+              ) : (
+                <>
+                  <Lock size={18} className="text-amber-300 shrink-0" />
+                  <span>অর্ডার কনফার্ম করুন (ক্যাশ অন ডেলিভারি) - ৳{totalAmount}</span>
+                </>
+              )}
+            </button>
+
+            {/* DIRECT SOCIAL MESSAGING ORDER (WHATSAPP & MESSENGER) */}
+            <div className="space-y-2 pt-1">
+              <div className="flex items-center gap-2 text-slate-400 text-xs">
+                <div className="h-px bg-slate-200 flex-1"></div>
+                <span className="font-semibold text-[11px] text-slate-500">অথবা সরাসরি মেসেজে অর্ডার করুন</span>
+                <div className="h-px bg-slate-200 flex-1"></div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {/* WhatsApp Order Button */}
+                <button
+                  type="button"
+                  onClick={handleWhatsAppOrder}
+                  className="btn min-h-[44px] h-auto py-2.5 bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs sm:text-sm rounded-xl border-0 shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 group cursor-pointer"
+                  title="WhatsApp-এ অর্ডারের তথ্য স্বয়ংক্রিয়ভাবে কপি ও সেন্ড করুন"
+                >
+                  <MessageCircle size={18} className="shrink-0 transition-transform group-hover:scale-110" />
+                  <span>WhatsApp-এ অর্ডার</span>
+                </button>
+
+                {/* Messenger Order Button */}
+                <button
+                  type="button"
+                  onClick={handleMessengerOrder}
+                  className="btn min-h-[44px] h-auto py-2.5 bg-gradient-to-tr from-[#00C6FF] to-[#0078FF] hover:from-[#00b4e6] hover:to-[#006ee6] text-white font-bold text-xs sm:text-sm rounded-xl border-0 shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 group cursor-pointer"
+                  title="Messenger-এ অর্ডারের তথ্য কপি করে পাঠিয়ে দিন"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                    className="shrink-0 transition-transform group-hover:scale-110"
+                  >
+                    <path d="M12 2C6.477 2 2 6.145 2 11.258c0 2.914 1.455 5.518 3.735 7.185v3.557l3.415-1.874c.915.253 1.884.39 2.85.39 5.523 0 10-4.145 10-9.258C22 6.145 17.523 2 12 2zm1.066 12.443l-2.61-2.784-5.094 2.784 5.6-5.946 2.677 2.784 5.027-2.784-5.6 5.946z" />
+                  </svg>
+                  <span>Messenger-এ অর্ডার</span>
+                </button>
+              </div>
+
+              {/* Copy Feedback Notification Toast */}
+              {copyToast && (
+                <div className="alert bg-emerald-800 text-white rounded-xl p-2.5 flex items-center gap-2 text-xs font-bold shadow-md animate-fade-in">
+                  <CheckCircle2 size={16} className="text-amber-300 shrink-0" />
+                  <span>{copyToast}</span>
+                </div>
+              )}
+            </div>
 
             <div className="text-center text-[11px] text-slate-500">
               <p>🔒 আপনার তথ্য সম্পূর্ণ নিরাপদ ও সুরক্ষিত থাকবে।</p>

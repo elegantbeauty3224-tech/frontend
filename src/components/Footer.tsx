@@ -17,10 +17,12 @@ export const Footer = React.memo(function Footer() {
             </div>
           </div>
 
-          <div className="text-slate-600">
-            হটলাইন: <a href="tel:01648439277" className="font-bold text-emerald-800 hover:underline">01648-439277</a>
+          <div className="text-slate-600 flex flex-wrap items-center justify-center sm:justify-start gap-y-1">
+            <span>হটলাইন: <a href="tel:01648439277" className="font-bold text-emerald-800 hover:underline">01648-439277</a></span>
             <span className="mx-2 text-slate-300">|</span>
-            ইমেইল: <a href="mailto:elegantbeauty3224@gmail.com" className="hover:underline font-medium">elegantbeauty3224@gmail.com</a>
+            <span>ফেসবুক: <a href="https://www.facebook.com/elegantbeauty.xyz" target="_blank" rel="noopener noreferrer" className="hover:underline font-semibold text-blue-600">fb.com/elegantbeauty.xyz</a></span>
+            <span className="mx-2 text-slate-300">|</span>
+            <span>ইমেইল: <a href="mailto:elegantbeauty3224@gmail.com" className="hover:underline font-medium">elegantbeauty3224@gmail.com</a></span>
           </div>
 
           <div className="text-slate-600 font-medium">

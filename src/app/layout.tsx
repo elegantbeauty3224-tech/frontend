@@ -204,7 +204,7 @@ export default function RootLayout({
           "availableLanguage": ["bn", "en"]
         },
         "sameAs": [
-          "https://www.facebook.com/HeroStack"
+          "https://www.facebook.com/elegantbeauty.xyz"
         ]
       },
       {

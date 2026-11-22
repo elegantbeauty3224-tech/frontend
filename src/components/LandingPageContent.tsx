@@ -641,12 +641,6 @@ export function LandingPageContent() {
     e.preventDefault();
     setErrorMsg('');
 
-    // Enforce login requirement: User must be logged in to order
-    if (!user) {
-      setErrorMsg('অর্ডার করতে অনুগ্রহ করে প্রথমে আপনার Google অ্যাকাউন্ট দিয়ে লগইন করুন।');
-      return;
-    }
-
     if (!customerName.trim()) {
       setErrorMsg('অনুগ্রহ করে আপনার নাম প্রদান করুন।');
       return;

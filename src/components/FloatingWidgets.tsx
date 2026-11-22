@@ -27,7 +27,7 @@ export const FloatingWidgets = React.memo(function FloatingWidgets({
       {/* FLOATING CART BUTTON (DESKTOP & TABLET ONLY - NO MOBILE OVERLAP) */}
       <button
         onClick={onOpenCart}
-        className={`hidden md:flex fixed bottom-40 right-6 z-40 btn bg-[#12372A] hover:bg-[#1c4e3c] text-white rounded-2xl shadow-2xl border-2 border-emerald-400/30 items-center gap-2.5 px-4 py-3 group transition-transform duration-200 ${
+        className={`hidden md:flex fixed bottom-52 right-6 z-40 btn bg-[#12372A] hover:bg-[#1c4e3c] text-white rounded-2xl shadow-2xl border-2 border-emerald-400/30 items-center gap-2.5 px-4 py-3 group transition-transform duration-200 ${
           cartBump ? 'animate-cart-bump' : 'hover:scale-105'
         }`}
         title="শপিং ব্যাগ দেখুন"
@@ -72,8 +72,29 @@ export const FloatingWidgets = React.memo(function FloatingWidgets({
         </button>
       </div>
 
-      {/* FLOATING WHATSAPP & HOTLINE BUTTONS (POSITIONED SAFELY ABOVE MOBILE BAR) */}
+      {/* FLOATING ACTION BUTTONS: MESSENGER, WHATSAPP & HOTLINE (POSITIONED SAFELY ABOVE MOBILE BAR) */}
       <div className="fixed bottom-20 md:bottom-6 right-4 md:right-6 z-30 flex flex-col gap-2.5">
+        {/* FACEBOOK MESSENGER */}
+        <a
+          href="https://m.me/elegantbeauty.xyz"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-12 h-12 bg-gradient-to-tr from-[#00C6FF] to-[#0078FF] hover:from-[#00b4e6] hover:to-[#006ee6] text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform group"
+          title="Facebook Messenger-এ মেসেজ দিন"
+          aria-label="Facebook Messenger Support"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="24"
+            height="24"
+            fill="currentColor"
+            className="transition-transform group-hover:scale-110"
+          >
+            <path d="M12 2C6.477 2 2 6.145 2 11.258c0 2.914 1.455 5.518 3.735 7.185v3.557l3.415-1.874c.915.253 1.884.39 2.85.39 5.523 0 10-4.145 10-9.258C22 6.145 17.523 2 12 2zm1.066 12.443l-2.61-2.784-5.094 2.784 5.6-5.946 2.677 2.784 5.027-2.784-5.6 5.946z" />
+          </svg>
+        </a>
+
+        {/* WHATSAPP */}
         <a
           href="https://wa.me/8801648439277?text=আসসালামু%20আলাইকুম,%20আমি%20Elegant%20Beauty%20অফার%20থেকে%20অর্ডার%20করতে%20চাই"
           target="_blank"
@@ -85,6 +106,7 @@ export const FloatingWidgets = React.memo(function FloatingWidgets({
           <MessageCircle size={24} />
         </a>
 
+        {/* CALL HOTLINE */}
         <a
           href="tel:01648439277"
           className="w-12 h-12 bg-[#12372A] text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"

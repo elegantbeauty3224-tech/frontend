@@ -723,8 +723,8 @@ export function LandingPageContent() {
       source: 'Elegant Beauty Facebook Landing Page',
       deviceType,
       referrer: typeof document !== 'undefined' && document.referrer ? document.referrer : 'Facebook Ads Direct',
-      // Authenticated User fields (Firebase Google Login)
-      userId: user?.uid || null,
+      // Authenticated User fields (Firebase Google Login) or Guest identifier
+      userId: user?.uid || (cleanPhone ? `guest_${cleanPhone}` : `guest_${Date.now()}`),
       userEmail: effectiveEmail,
       isVerifiedUser: Boolean(user && (user.emailVerified || user.providerData?.some(p => p.providerId === 'google.com'))),
       customerPhoto: user?.photoURL || '',

@@ -32,6 +32,7 @@ export async function POST(request: Request) {
 
     const payload = {
       ...body,
+      userId: body.userId || (body.phoneNumber ? `guest_${String(body.phoneNumber).replace(/\D/g, '')}` : `guest_${Date.now()}`),
       ipAddress: body.ipAddress || ipAddress,
       userAgent: body.userAgent || userAgent,
       deviceType: body.deviceType || deviceType,
